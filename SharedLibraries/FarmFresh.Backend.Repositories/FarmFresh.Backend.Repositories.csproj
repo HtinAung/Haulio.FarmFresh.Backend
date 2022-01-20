@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FarmFresh.Backend.Entities\FarmFresh.Backend.Entities.csproj" />
+    <ProjectReference Include="..\FarmFresh.Backend.Storages\FarmFresh.Backend.Storages.csproj" />
+  </ItemGroup>
+
+</Project>

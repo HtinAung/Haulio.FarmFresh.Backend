@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+
+
+		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.13" />
+
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.13" />
+
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.13" />
+
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.13" />
+
+		<PackageReference Include="Serilog.Sinks.AzureBlobStorage" Version="3.0.3" />
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FarmFresh.Backend.DataTransferObjects\FarmFresh.Backend.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\FarmFresh.Backend.Entities\FarmFresh.Backend.Entities.csproj" />
+    <ProjectReference Include="..\FarmFresh.Backend.Repositories\FarmFresh.Backend.Repositories.csproj" />
+    <ProjectReference Include="..\FarmFresh.Backend.Shared\FarmFresh.Backend.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
