@@ -25,7 +25,7 @@ namespace FarmFresh.IdentityServer
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(connectionString));
 
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

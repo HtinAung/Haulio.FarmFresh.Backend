@@ -8,6 +8,8 @@ namespace FarmFresh.Backend.Storages.SQLServer.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
+            builder.ToTable("Users");
+
             builder
                 .Property(c => c.FullName)
                 .HasMaxLength(255)

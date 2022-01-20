@@ -23,5 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\FarmFresh.Backend.Entities\FarmFresh.Backend.Entities.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\Common\" />
+  </ItemGroup>
 
 </Project>

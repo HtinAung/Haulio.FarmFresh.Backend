@@ -23,7 +23,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{39D3DD1C-3AA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared Libraries", "{13BEF497-8F8B-4E8D-A61C-514742CE1249}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Api", "Api\FarmFresh.Backend.Api\FarmFresh.Backend.Api.csproj", "{8A0AE77D-5A05-4E9F-A7DA-18FCF02622B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmFresh.Backend.Api", "Api\FarmFresh.Backend.Api\FarmFresh.Backend.Api.csproj", "{8A0AE77D-5A05-4E9F-A7DA-18FCF02622B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8DA2B08-C773-4502-86D7-069229163160}"
+	ProjectSection(SolutionItems) = preProject
+		How-To-Run-Migrations = How-To-Run-Migrations
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

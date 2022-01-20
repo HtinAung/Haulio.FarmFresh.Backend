@@ -1,0 +1,4 @@
+﻿1. Add/Update Common Migrations (non Idsv4 Migrations)
+Add-Migration  -Name YOUR_MIGRATION_NAME -OutputDir Migrations/Common -Context ApplicationDbContext -Project FarmFresh.Backend.Storages -StartupProject FarmFresh.Backend.IdentityServer
+
+Update-Database -V -Context ApplicationDbContext -Project FarmFresh.Backend.Storages -StartupProject FarmFresh.Backend.IdentityServer

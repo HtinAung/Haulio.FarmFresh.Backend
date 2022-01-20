@@ -31,6 +31,13 @@ namespace FarmFresh.Backend.Storages.SQLServer
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new AppUserEntityTypeConfiguration());
             builder.ApplyConfiguration(new AppUserAddressEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppRoleEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppIdentityRoleClaimEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppIdentityUserRoleEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppIdentityUserClaimEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppIdentityUserLoginEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppIdentityUserTokenEntityTypeConfiguration());
+
         }
 
         public virtual DbSet<AppUserAddress> UserAddresses { get; set; }
