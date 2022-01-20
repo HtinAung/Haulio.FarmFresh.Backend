@@ -13,12 +13,12 @@
 	 - CategoryId (guid)
 	 - StoredId (guid)
 
- > Order
+ > OrderHistory
 	 - Id (guid)
 	 - Item (string)
 	 - Total (int)
 	 - Price (decimal)
-	 - OrderDate (datetime)
+	 - OrderDate/ModifiedDate (datetime)
 	 - UserId (guid)
 	 - StoreId (guid)
 
@@ -27,6 +27,7 @@
 	 - FullName (string)
 	 - Email (string)
 	 - Password (string)
+	 - StoreId (guid)
 	 - Addresses (1) (list of UserAddress)
 	 - OrderHistories (list of User Order History)
 

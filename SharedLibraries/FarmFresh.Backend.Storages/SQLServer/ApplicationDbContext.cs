@@ -37,9 +37,18 @@ namespace FarmFresh.Backend.Storages.SQLServer
             builder.ApplyConfiguration(new AppIdentityUserClaimEntityTypeConfiguration());
             builder.ApplyConfiguration(new AppIdentityUserLoginEntityTypeConfiguration());
             builder.ApplyConfiguration(new AppIdentityUserTokenEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppProductCategoryEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppProductEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppOrderHistoryEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AppStoreEntityTypeConfiguration());
 
         }
 
         public virtual DbSet<AppUserAddress> UserAddresses { get; set; }
+        public virtual DbSet<AppProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<AppProduct> Products { get; set; }
+
+        public virtual DbSet<AppOrderHistory> OrderHistories { get; set; }
+        public virtual DbSet<AppStore> Stores { get; set; }
     }
 }

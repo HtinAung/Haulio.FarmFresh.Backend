@@ -20,6 +20,14 @@ namespace FarmFresh.Backend.Storages.SQLServer.EntityTypeConfigurations
                 .WithOne(c => c.AppUser)
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(c => c.OrderHistories)
+                .WithOne(c => c.User).HasForeignKey(c => c.UserId);
+
+            builder.HasOne(c => c.Store)
+                .WithOne(c => c.User)
+                .IsRequired(false)
+                .HasForeignKey<AppStore>(c => c.UserId);
                 
         }
     }
