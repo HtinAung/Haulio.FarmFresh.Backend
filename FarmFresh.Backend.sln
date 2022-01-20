@@ -27,7 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmFresh.Backend.Api", "Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8DA2B08-C773-4502-86D7-069229163160}"
 	ProjectSection(SolutionItems) = preProject
-		How-To-Run-Migrations = How-To-Run-Migrations
+		Business-Entities.txt = Business-Entities.txt
+		How-To-Run-Migrations.txt = How-To-Run-Migrations.txt
 	EndProjectSection
 EndProject
 Global
