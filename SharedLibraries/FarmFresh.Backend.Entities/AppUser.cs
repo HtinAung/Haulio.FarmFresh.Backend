@@ -9,6 +9,8 @@ namespace FarmFresh.Backend.Entities
         public string FullName { get; set; }
         public Nullable<Guid> StoreId { get; set; }
         public virtual AppStore Store { get; set; }
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
+        public bool IsActive { get; set; } = true;
         public virtual List<AppUserAddress> Address { get; set; } = new List<AppUserAddress>();
         public virtual List<AppOrderHistory> OrderHistories { get; set; } = new List<AppOrderHistory>();
     }
