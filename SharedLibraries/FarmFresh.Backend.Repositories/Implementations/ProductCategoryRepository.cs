@@ -57,6 +57,10 @@ namespace FarmFresh.Backend.Repositories.Implementations
             {
                 throw new Exception($"Product Category with id: {entity.Id} is not found");
             }
+            if(!_context.ProductCategories.Local.Any(c => c.Id == entity.Id))
+            {
+                _context.ProductCategories.Attach(entity);
+            }
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
@@ -69,6 +73,10 @@ namespace FarmFresh.Backend.Repositories.Implementations
             {
                 throw new Exception($"Product Category with id: {id} is not found");
             }
+            if (!_context.ProductCategories.Local.Any(c => c.Id == entity.Id))
+            {
+                _context.ProductCategories.Attach(entity);
+            }
             entity.IsActive = false;
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -80,6 +88,10 @@ namespace FarmFresh.Backend.Repositories.Implementations
             if (entity == null)
             {
                 throw new Exception($"Product Category with id: {id} is not found");
+            }
+            if (!_context.ProductCategories.Local.Any(c => c.Id == entity.Id))
+            {
+                _context.ProductCategories.Attach(entity);
             }
             entity.IsActive = true;
             _context.Entry(entity).State = EntityState.Modified;
