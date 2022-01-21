@@ -32,6 +32,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8DA2B08
 		Technical-Notes.txt = Technical-Notes.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22415E0C-E665-448B-ABFF-B0DDB06E8EDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Repositories.Tests", "Tests\FarmFresh.Backend.Repositories.Tests\FarmFresh.Backend.Repositories.Tests.csproj", "{CC830867-2B0F-4BBE-B09A-F3638B70A26F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +74,10 @@ Global
 		{8A0AE77D-5A05-4E9F-A7DA-18FCF02622B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A0AE77D-5A05-4E9F-A7DA-18FCF02622B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A0AE77D-5A05-4E9F-A7DA-18FCF02622B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC830867-2B0F-4BBE-B09A-F3638B70A26F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC830867-2B0F-4BBE-B09A-F3638B70A26F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC830867-2B0F-4BBE-B09A-F3638B70A26F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC830867-2B0F-4BBE-B09A-F3638B70A26F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +91,7 @@ Global
 		{27C3FA31-5834-413E-B4B1-B5A6C35C4EB7} = {13BEF497-8F8B-4E8D-A61C-514742CE1249}
 		{2FF1CE9B-C7AC-49F9-BA32-781A5578F7A5} = {13BEF497-8F8B-4E8D-A61C-514742CE1249}
 		{8A0AE77D-5A05-4E9F-A7DA-18FCF02622B4} = {39D3DD1C-3AAE-4064-96F4-BBE8000BEFD9}
+		{CC830867-2B0F-4BBE-B09A-F3638B70A26F} = {22415E0C-E665-448B-ABFF-B0DDB06E8EDA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B342EEC2-1407-4A2C-BB1F-F225568FA39D}

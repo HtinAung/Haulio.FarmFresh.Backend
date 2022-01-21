@@ -5,7 +5,7 @@ namespace FarmFresh.Backend.Entities
 {
     public class AppStore : AppBaseEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public virtual List<AppProduct> Products { get; set; } = new List<AppProduct>();
 

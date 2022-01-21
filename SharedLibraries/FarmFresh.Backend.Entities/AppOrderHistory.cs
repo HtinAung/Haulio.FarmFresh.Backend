@@ -4,7 +4,7 @@ namespace FarmFresh.Backend.Entities
 {
     public class AppOrderHistory : AppBaseEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Item { get; set; }
         public int Total { get; set; }
         public decimal Price { get; set; }
