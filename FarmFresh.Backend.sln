@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8DA2B08
 	ProjectSection(SolutionItems) = preProject
 		Business-Entities.txt = Business-Entities.txt
 		How-To-Run-Migrations.txt = How-To-Run-Migrations.txt
+		Technical-Notes.txt = Technical-Notes.txt
 	EndProjectSection
 EndProject
 Global

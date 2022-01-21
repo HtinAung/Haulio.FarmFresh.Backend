@@ -26,5 +26,9 @@
     <ProjectReference Include="..\FarmFresh.Backend.Repositories\FarmFresh.Backend.Repositories.csproj" />
     <ProjectReference Include="..\FarmFresh.Backend.Shared\FarmFresh.Backend.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementations\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
 
 </Project>
