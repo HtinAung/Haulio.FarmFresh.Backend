@@ -50,7 +50,15 @@ namespace FarmFresh.Backend.Crud.Tests
 
             var identityResult = await _userManager.CreateAsync(appUser, "@Future30");
             Assert.True(identityResult.Succeeded);
-            
+            identityResult = await _userManager.AddClaimsAsync(appUser, new List<Claim>
+            {
+                new Claim(JwtClaimTypes.Name, appUser.FullName),
+                new Claim(JwtClaimTypes.Email, appUser.Email),
+                new Claim(JwtClaimTypes.Role, GlobalConstants.StoreAdminRoleName)
+            });
+            Assert.True(identityResult.Succeeded);
+
+
             AppStore appStore = new AppStore
             {
                 Id = Guid.Parse("2b616b06-88e7-4cd3-8c4e-2968624c4a71"),

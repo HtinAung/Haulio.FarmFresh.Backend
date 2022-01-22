@@ -26,7 +26,6 @@ namespace FarmFresh.Backend.Repositories.Implementations
             }
             int totalRows = await _context
                 .OrderHistories
-                .Include(c => c.User)
                 .CountAsync(c => c.UserId == userId && c.IsActive);
 
             var result = await _context
@@ -35,6 +34,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 .Skip(input.SkipCount)
                 .Take(input.FetchSize)
                 .Include(c => c.User)
+                .Include(c => c.Store)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -57,7 +57,6 @@ namespace FarmFresh.Backend.Repositories.Implementations
 
             int totalRows = await _context
                 .OrderHistories
-                .Include(c => c.User)
                 .CountAsync(c => c.StoreId == storeId && c.IsActive);
 
             var result = await _context
@@ -65,6 +64,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 .Where(c => c.StoreId == storeId && c.IsActive)
                 .Skip(input.SkipCount)
                 .Take(input.FetchSize)
+                .Include(c => c.User)
                 .Include(c => c.Store)
                 .AsNoTracking()
                 .ToListAsync();
