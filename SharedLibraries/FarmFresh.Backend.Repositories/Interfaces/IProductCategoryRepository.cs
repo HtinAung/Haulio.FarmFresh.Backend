@@ -10,7 +10,7 @@ namespace FarmFresh.Backend.Repositories.Interfaces
     {
         Task BulkInsert(IEnumerable<AppProductCategory> entities);
         Task Update(AppProductCategory entity);
-        Task<BaseResponse<AppProductCategory>> GetAll(BaseRequest request);
+        Task<BaseListOutput<AppProductCategory>> GetAll(BaseListInput input);
         Task<AppProductCategory> GetById(Guid id);
     }
 }

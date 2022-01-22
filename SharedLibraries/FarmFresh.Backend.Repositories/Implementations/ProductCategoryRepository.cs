@@ -28,19 +28,19 @@ namespace FarmFresh.Backend.Repositories.Implementations
             return entity;
         }
 
-        public async Task<BaseResponse<AppProductCategory>> GetAll(BaseRequest request)
+        public async Task<BaseListOutput<AppProductCategory>> GetAll(BaseListInput input)
         {
             int totalRows = await _context.ProductCategories.CountAsync(c => c.IsActive);
             var result = await _context.ProductCategories.Where(c => c.IsActive)
-                .Skip(request.SkipCount)
-                .Take(request.FetchSize)
+                .Skip(input.SkipCount)
+                .Take(input.FetchSize)
                 .AsNoTracking()
                 .ToListAsync();
-            return new BaseResponse<AppProductCategory>
+            return new BaseListOutput<AppProductCategory>
             {
                 TotalRows = totalRows,
-                SkipCount = request.SkipCount,
-                FetchSize = request.FetchSize,
+                SkipCount = input.SkipCount,
+                FetchSize = input.FetchSize,
                 Rows = result
             };
         }

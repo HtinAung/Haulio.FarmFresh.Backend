@@ -10,8 +10,10 @@ using FarmFresh.Backend.Storages.SQLServer;
 using Microsoft.EntityFrameworkCore;
 using FarmFresh.Backend.Repositories.Interfaces;
 using FarmFresh.Backend.Repositories.Implementations;
+using FarmFresh.Backend.Entities;
+using Microsoft.AspNetCore.Identity;
 
-namespace FarmFresh.Backend.Repositories.Tests
+namespace FarmFresh.Backend.Crud.Tests
 {
     public class Startup
     {
@@ -28,7 +30,17 @@ namespace FarmFresh.Backend.Repositories.Tests
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<AppUser, AppRole>()
+                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                 .AddDefaultTokenProviders();
+
+            services.AddScoped<RoleManager<AppRole>>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserAddressRepository, UserAddressRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
         }
     }
 }

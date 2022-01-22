@@ -18,7 +18,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<BaseResponse<AppOrderHistory>> GetAllByUser(Guid userId, BaseRequest request)
+        public async Task<BaseListOutput<AppOrderHistory>> GetAllByUser(Guid userId, BaseListInput input)
         {
             if(! await _context.Users.AnyAsync(c => c.Id == userId && c.IsActive))
             {
@@ -32,22 +32,22 @@ namespace FarmFresh.Backend.Repositories.Implementations
             var result = await _context
                 .OrderHistories
                 .Where(c => c.UserId == userId && c.IsActive)
-                .Skip(request.SkipCount)
-                .Take(request.FetchSize)
+                .Skip(input.SkipCount)
+                .Take(input.FetchSize)
                 .Include(c => c.User)
                 .AsNoTracking()
                 .ToListAsync();
 
-            return new BaseResponse<AppOrderHistory>
+            return new BaseListOutput<AppOrderHistory>
             {
                 TotalRows = totalRows,
-                SkipCount = request.SkipCount,
-                FetchSize = request.FetchSize,
+                SkipCount = input.SkipCount,
+                FetchSize = input.FetchSize,
                 Rows = result
             };
         }
 
-        public async Task<BaseResponse<AppOrderHistory>> GetAllByStore(Guid storeId, BaseRequest request)
+        public async Task<BaseListOutput<AppOrderHistory>> GetAllByStore(Guid storeId, BaseListInput input)
         {
             if (!await _context.Stores.AnyAsync(c => c.Id == storeId && c.IsActive))
             {
@@ -62,17 +62,17 @@ namespace FarmFresh.Backend.Repositories.Implementations
             var result = await _context
                 .OrderHistories
                 .Where(c => c.StoreId == storeId && c.IsActive)
-                .Skip(request.SkipCount)
-                .Take(request.FetchSize)
+                .Skip(input.SkipCount)
+                .Take(input.FetchSize)
                 .Include(c => c.Store)
                 .AsNoTracking()
                 .ToListAsync();
 
-            return new BaseResponse<AppOrderHistory>
+            return new BaseListOutput<AppOrderHistory>
             {
                 TotalRows = totalRows,
-                SkipCount = request.SkipCount,
-                FetchSize = request.FetchSize,
+                SkipCount = input.SkipCount,
+                FetchSize = input.FetchSize,
                 Rows = result
             };
         }
@@ -82,18 +82,5 @@ namespace FarmFresh.Backend.Repositories.Implementations
             _context.OrderHistories.Add(entity);
             await _context.SaveChangesAsync();
         }
-
-
-        #region Not Implemented
-        public Task SetActive(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetInactive(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }

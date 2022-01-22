@@ -1,6 +1,6 @@
 ﻿namespace FarmFresh.Backend.Shared
 {
-    public class BaseRequest
+    public class BaseListInput
     {
         public string Query { get; set; } = string.Empty;
         public int SkipCount { get; set; } = 0;

@@ -2,7 +2,7 @@
 
 namespace FarmFresh.Backend.Shared
 {
-    public class BaseResponse<T>
+    public class BaseListOutput<T>
     {
         public string Query { get; set; } = string.Empty;
         public int SkipCount { get; set; }

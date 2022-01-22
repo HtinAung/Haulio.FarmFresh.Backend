@@ -9,8 +9,10 @@ namespace FarmFresh.Backend.Repositories.Interfaces
 {
     public interface IProductRepository: IBaseRepository<AppProduct>
     {
-        Task<BaseResponse<AppProduct>> GetAll(Guid storeId, BaseRequest request);
-        Task<AppProduct> GetById(Guid storeId, Guid productId);
+        Task<BaseListOutput<AppProduct>> GetAll(Guid storeId, ProductListInput input);
+        Task<AppProduct> GetById(Guid storeId, Guid productId, bool includeRelatonships = true);
+        Task<int> GetProductAvailableAmount(Guid storeId, Guid productId);
+        Task UpdateProductAvailableAmount(Guid storeId, Guid productId, int currentAmount);
         Task Update(AppProduct entity);
         Task Insert(AppProduct entity);
     }

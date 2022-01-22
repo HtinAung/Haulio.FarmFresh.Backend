@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace FarmFresh.Backend.Repositories.Interfaces
 {
-    public interface IOrderHistoryRepository:IBaseRepository<AppOrderHistory>
+    public interface IOrderHistoryRepository
     {
-        Task<BaseResponse<AppOrderHistory>> GetAllByUser(Guid userId, BaseRequest request);
-        Task<BaseResponse<AppOrderHistory>> GetAllByStore(Guid storeId, BaseRequest request);
+        Task<BaseListOutput<AppOrderHistory>> GetAllByUser(Guid userId, BaseListInput input);
+        Task<BaseListOutput<AppOrderHistory>> GetAllByStore(Guid storeId, BaseListInput input);
         Task Insert(AppOrderHistory entity);
     }
 }

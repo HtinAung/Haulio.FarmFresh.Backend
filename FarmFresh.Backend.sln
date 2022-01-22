@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8DA2B08
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22415E0C-E665-448B-ABFF-B0DDB06E8EDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Repositories.Tests", "Tests\FarmFresh.Backend.Repositories.Tests\FarmFresh.Backend.Repositories.Tests.csproj", "{CC830867-2B0F-4BBE-B09A-F3638B70A26F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmFresh.Backend.Crud.Tests", "Tests\FarmFresh.Backend.Repositories.Tests\FarmFresh.Backend.Crud.Tests.csproj", "{CC830867-2B0F-4BBE-B09A-F3638B70A26F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

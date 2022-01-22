@@ -55,7 +55,6 @@ namespace FarmFresh.IdentityServer
                         {
                             throw new Exception(result.Errors.First().Description);
                         }
-
                         result = userMgr.AddClaimsAsync(customerUser, new Claim[]{
                             new Claim(JwtClaimTypes.Name, customerUser.FullName),
                             new Claim(JwtClaimTypes.Email, customerUser.Email),

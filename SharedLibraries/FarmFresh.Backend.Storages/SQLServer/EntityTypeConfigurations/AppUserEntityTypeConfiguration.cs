@@ -16,7 +16,7 @@ namespace FarmFresh.Backend.Storages.SQLServer.EntityTypeConfigurations
                 .IsRequired();
 
             builder
-                .HasMany(c => c.Address)
+                .HasMany(c => c.Addresses)
                 .WithOne(c => c.AppUser)
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

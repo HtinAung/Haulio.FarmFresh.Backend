@@ -1,15 +1,14 @@
 using FarmFresh.Backend.Entities;
 using FarmFresh.Backend.Repositories.Interfaces;
 using FarmFresh.Backend.Shared;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FarmFresh.Backend.Repositories.Tests
+namespace FarmFresh.Backend.Crud.Tests
 {
-    [Trait("Repo","ProductCategory")]
+    [Trait("Name",nameof(ProductCategoryRepositoryTest))]
     public class ProductCategoryRepositoryTest
     {
         private readonly IProductCategoryRepository _repository;
@@ -51,7 +50,7 @@ namespace FarmFresh.Backend.Repositories.Tests
                 }
             };
             await _repository.BulkInsert(entities);
-            var result = await _repository.GetAll(new BaseRequest());
+            var result = await _repository.GetAll(new BaseListInput());
             Assert.Equal(5, result.TotalRows);
 
         }
@@ -78,7 +77,6 @@ namespace FarmFresh.Backend.Repositories.Tests
             entity = await _repository.GetById(Guid.Parse("fb3ae426-935c-4213-99a6-40039e1642eb"));
             Assert.Equal("Dairy & Chilled", entity.Name);
         }
-
 
 
         [Theory]
