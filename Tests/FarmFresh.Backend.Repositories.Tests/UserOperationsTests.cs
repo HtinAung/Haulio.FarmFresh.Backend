@@ -59,8 +59,17 @@ namespace FarmFresh.Backend.Crud.Tests
         [InlineData("62c01466-b243-4b5a-9f81-fc4d39507fae")]
         public async Task FindUserByIdTest(string id)
         {
-            Guid userId = Guid.Parse(id);
             AppUser appUser = await _userManager.FindByIdAsync(id);
+            Assert.NotNull(appUser);
+            Assert.Equal("ghulamcyber@hotmail.com", appUser.Email, ignoreCase: true);
+        }
+
+        [Theory]
+        [InlineData("62c01466-b243-4b5a-9f81-fc4d39507fae")]
+        public async Task FindUserByIdUserRepoTest(string id)
+        {
+            Guid userId = Guid.Parse(id);
+            AppUser appUser = await _userRepository.GetUserById(userId);
             Assert.NotNull(appUser);
             Assert.Equal("ghulamcyber@hotmail.com", appUser.Email, ignoreCase: true);
         }

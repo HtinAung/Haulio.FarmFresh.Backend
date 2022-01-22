@@ -52,6 +52,36 @@ namespace FarmFresh.Backend.Repositories.Implementations
 
         }
 
+        public async Task TieAdminUserWithStore(Guid storeId, Guid userId)
+        {
+            //Step 1
+            var user = await _context.Users.FirstOrDefaultAsync(c => c.Id == userId && c.IsActive);
+            user.StoreId = storeId;
+
+            if(!_context.Users.Local.Any(c => c.Id == userId))
+            {
+                _context.Users.Attach(user);
+            }
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+
+            //Step 2
+            var store = await GetById(storeId);
+            store.UserId = user.Id;
+
+            if(!_context.Stores.Local.Any(c => c.Id == storeId))
+            {
+                _context.Stores.Attach(store);
+            }
+            _context.Entry(store).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+
+
+
+        }
+
         public async Task SetInactive(Guid id)
         {
             var entity = await _context.Stores.FirstOrDefaultAsync(c => c.Id == id && c.IsActive);

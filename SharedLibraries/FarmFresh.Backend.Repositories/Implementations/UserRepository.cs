@@ -1,4 +1,5 @@
-﻿using FarmFresh.Backend.Repositories.Interfaces;
+﻿using FarmFresh.Backend.Entities;
+using FarmFresh.Backend.Repositories.Interfaces;
 using FarmFresh.Backend.Storages.SQLServer;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,6 +29,19 @@ namespace FarmFresh.Backend.Repositories.Implementations
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
+        }
+
+        public async Task<AppUser> GetUserById(Guid id)
+        {
+            var entity = await _context
+               .Users
+               .Include(c => c.Addresses)
+               .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
+            if (entity == null)
+            {
+                throw new Exception($"User with id {id} is not found / been de-activated");
+            }
+            return entity;
         }
 
         public async Task SetInactive(Guid id)

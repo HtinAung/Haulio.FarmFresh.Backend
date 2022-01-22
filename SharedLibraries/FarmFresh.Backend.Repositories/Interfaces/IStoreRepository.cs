@@ -9,5 +9,6 @@ namespace FarmFresh.Backend.Repositories.Interfaces
         Task<AppStore> GetById(Guid id);
         Task<Guid> Insert(AppStore entity);
         Task ChangeName(Guid id, string newName);
+        Task TieAdminUserWithStore(Guid storeId, Guid userId);
     }
 }
