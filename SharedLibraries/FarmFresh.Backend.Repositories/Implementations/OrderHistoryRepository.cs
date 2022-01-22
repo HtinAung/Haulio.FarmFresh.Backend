@@ -43,6 +43,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 TotalRows = totalRows,
                 SkipCount = input.SkipCount,
                 FetchSize = input.FetchSize,
+                Query = input.Query,
                 Rows = result
             };
         }
@@ -73,6 +74,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 TotalRows = totalRows,
                 SkipCount = input.SkipCount,
                 FetchSize = input.FetchSize,
+                Query = input.Query,
                 Rows = result
             };
         }

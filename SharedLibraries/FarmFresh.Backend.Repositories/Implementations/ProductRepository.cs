@@ -62,6 +62,51 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 TotalRows = totalRows,
                 SkipCount = input.SkipCount,
                 FetchSize = input.FetchSize,
+                Query = input.Query,
+                Rows = result
+            };
+        }
+
+        public async Task<BaseListOutput<AppProduct>> GetAll(ProductListInput input)
+        {
+            
+            List<AppProduct> result = new List<AppProduct>();
+            int totalRows = 0;
+
+            input.Query = input.Query.Trim();
+            input.Category = input.Category.Trim();
+
+            switch (input.Category)
+            {
+                case GlobalConstants.CategoryNewKeyword:
+                    {
+                        (totalRows, result) = await QueryProductsByNewCategory(input);
+                        break;
+                    }
+                case GlobalConstants.CategoryOnSalesKeyword:
+                    {
+                        (totalRows, result) = await QueryProductsByOnSalesCategory(input);
+                        break;
+                    }
+                case GlobalConstants.CategoryStoreKeyword:
+                    {
+                        (totalRows, result) = await QueryProductsByStoreCategory(input);
+                        break;
+                    }
+                default:
+                    {
+                        (totalRows, result) = await QueryProductsByDatabaseDataCategory(input);
+
+                        break;
+                    }
+            }
+
+            return new BaseListOutput<AppProduct>
+            {
+                TotalRows = totalRows,
+                SkipCount = input.SkipCount,
+                FetchSize = input.FetchSize,
+                Query = input.Query,
                 Rows = result
             };
         }
@@ -77,7 +122,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
 
             if (includeRelatonships)
             {
-                await _context
+                result =  await _context
                 .Products
                 .Include(c => c.Store)
                 .Include(c => c.Category)
@@ -85,12 +130,39 @@ namespace FarmFresh.Backend.Repositories.Implementations
             }
             else
             {
-                await _context
+                result = await _context
                 .Products
                 .FirstOrDefaultAsync(c => c.StoreId == storeId && c.Id == productId && c.IsActive);
             }
 
             if(result == null)
+            {
+                throw new Exception($"Product not found");
+            }
+            return result;
+        }
+
+        public async Task<AppProduct> GetById(Guid productId, bool includeRelatonships = true)
+        {
+          
+            AppProduct result = null;
+
+            if (includeRelatonships)
+            {
+                result = await _context
+                .Products
+                .Include(c => c.Store)
+                .Include(c => c.Category)
+                .FirstOrDefaultAsync(c => c.Id == productId && c.IsActive);
+            }
+            else
+            {
+                result = await _context
+                .Products
+                .FirstOrDefaultAsync(c => c.Id == productId && c.IsActive);
+            }
+
+            if (result == null)
             {
                 throw new Exception($"Product not found");
             }
@@ -137,10 +209,32 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 throw new Exception($"Product with id: {entity.Id} cannot have < 0 available amount");
 
             }
-            store.Products.Add(entity);
-            _context.Entry(store).State = EntityState.Modified;
-
+            _context.Products.Add(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> BulkInsert(Guid storeId, IEnumerable<AppProduct> entities)
+        {
+            var store = await _context
+                .Stores
+                .Include(c => c.Products)
+                .FirstOrDefaultAsync(c => c.Id == storeId && c.IsActive);
+
+            if (store == null)
+            {
+                throw new Exception($"Store not found / been de-activated");
+            }
+            foreach(var entity in entities)
+            {
+                if (entity.AvailableAmount < 0)
+                {
+                    throw new Exception($"Product with id: {entity.Id} cannot have < 0 available amount");
+
+                }
+            }
+            await _context.Products.AddRangeAsync(entities);
+            int total = await _context.SaveChangesAsync();
+            return total;
         }
 
         public async Task<int> GetProductAvailableAmount(Guid storeId, Guid productId)
@@ -229,13 +323,13 @@ namespace FarmFresh.Backend.Repositories.Implementations
 
                 totalRows = await _context
                     .Products
-                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase));
+                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query));
 
                 result = await _context
                     .Products
                     .Include(c => c.Category)
                     .Include(c => c.Store)
-                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase))
+                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query))
                     .OrderByDescending(c => c.ModifiedDate)
                     .Skip(input.SkipCount)
                     .Take(input.FetchSize)
@@ -244,6 +338,47 @@ namespace FarmFresh.Backend.Repositories.Implementations
             }
             return (totalRows, result);
         }
+        private async Task<(int Total, List<AppProduct>)> QueryProductsByNewCategory(ProductListInput input)
+        {
+            List<AppProduct> result = new List<AppProduct>();
+            int totalRows = 0;
+            if (string.IsNullOrEmpty(input.Query))
+            {
+
+                totalRows = await _context.Products.CountAsync(c => c.AvailableAmount > 0 && c.IsActive);
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c => c.AvailableAmount > 0 && c.IsActive)
+                    .OrderByDescending(c => c.ModifiedDate)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+
+                totalRows = await _context
+                    .Products
+                    .CountAsync(c =>  c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query));
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c => c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query))
+                    .OrderByDescending(c => c.ModifiedDate)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            return (totalRows, result);
+        }
+
 
         private async Task<(int Total, List<AppProduct>)> QueryProductsByOnSalesCategory(Guid storeId, ProductListInput input)
         {
@@ -271,13 +406,55 @@ namespace FarmFresh.Backend.Repositories.Implementations
 
                 totalRows = await _context
                     .Products
-                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase));
+                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query));
 
                 result = await _context
                     .Products
                     .Include(c => c.Category)
                     .Include(c => c.Store)
-                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase))
+                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query))
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            return (totalRows, result);
+        }
+
+
+        private async Task<(int Total, List<AppProduct>)> QueryProductsByOnSalesCategory(ProductListInput input)
+        {
+            List<AppProduct> result = new List<AppProduct>();
+            int totalRows = 0;
+            if (string.IsNullOrEmpty(input.Query))
+            {
+
+                totalRows = await _context
+                    .Products
+                    .CountAsync(c =>  c.AvailableAmount > 0 && c.IsActive);
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c => c.AvailableAmount > 0 && c.IsActive)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+
+                totalRows = await _context
+                    .Products
+                    .CountAsync(c =>  c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query));
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c => c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query))
                     .Skip(input.SkipCount)
                     .Take(input.FetchSize)
                     .AsNoTracking()
@@ -311,13 +488,54 @@ namespace FarmFresh.Backend.Repositories.Implementations
 
                 totalRows = await _context
                     .Products
-                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase));
+                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query));
 
                 result = await _context
                     .Products
                     .Include(c => c.Category)
                     .Include(c => c.Store)
-                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase))
+                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query))
+                    .OrderBy(c => c.Store.Name)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            return (totalRows, result);
+        }
+
+        private async Task<(int Total, List<AppProduct>)> QueryProductsByStoreCategory(ProductListInput input)
+        {
+            List<AppProduct> result = new List<AppProduct>();
+            int totalRows = 0;
+            if (string.IsNullOrEmpty(input.Query))
+            {
+
+                totalRows = await _context.Products.CountAsync(c => c.AvailableAmount > 0 && c.IsActive);
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c => c.AvailableAmount > 0 && c.IsActive)
+                    .OrderBy(c => c.Store.Name)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+
+                totalRows = await _context
+                    .Products
+                    .CountAsync(c => c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query));
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c => c.AvailableAmount > 0 && c.IsActive && c.Name.Contains(input.Query))
                     .OrderBy(c => c.Store.Name)
                     .Skip(input.SkipCount)
                     .Take(input.FetchSize)
@@ -337,13 +555,13 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 totalRows = await _context
                     .Products
                     .Include(c => c.Category)
-                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category, StringComparison.InvariantCultureIgnoreCase) && c.IsActive);
+                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.IsActive);
 
                 result = await _context
                     .Products
                     .Include(c => c.Category)
                     .Include(c => c.Store)
-                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category, StringComparison.InvariantCultureIgnoreCase) && c.IsActive)
+                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.IsActive)
                     .OrderByDescending(c => c.ModifiedDate)
                     .Skip(input.SkipCount)
                     .Take(input.FetchSize)
@@ -356,13 +574,59 @@ namespace FarmFresh.Backend.Repositories.Implementations
                 totalRows = await _context
                     .Products
                     .Include(c => c.Category)
-                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category, StringComparison.InvariantCultureIgnoreCase) && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase) && c.IsActive);
+                    .CountAsync(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.Name.Contains(input.Query) && c.IsActive);
 
                 result = await _context
                     .Products
                     .Include(c => c.Category)
                     .Include(c => c.Store)
-                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category, StringComparison.InvariantCultureIgnoreCase) && c.Name.StartsWith(input.Query, StringComparison.InvariantCultureIgnoreCase) && c.IsActive)
+                    .Where(c => c.StoreId == storeId && c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.Name.Contains(input.Query) && c.IsActive)
+                    .OrderByDescending(c => c.ModifiedDate)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            return (totalRows, result);
+        }
+
+
+        private async Task<(int Total, List<AppProduct>)> QueryProductsByDatabaseDataCategory( ProductListInput input)
+        {
+            List<AppProduct> result = new List<AppProduct>();
+            int totalRows = 0;
+            if (string.IsNullOrEmpty(input.Query))
+            {
+
+                totalRows = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .CountAsync(c => c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.IsActive);
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c => c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.IsActive)
+                    .OrderByDescending(c => c.ModifiedDate)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+
+                totalRows = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .CountAsync(c =>  c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.Name.Contains(input.Query) && c.IsActive);
+
+                result = await _context
+                    .Products
+                    .Include(c => c.Category)
+                    .Include(c => c.Store)
+                    .Where(c =>  c.AvailableAmount > 0 && c.Category.Name.StartsWith(input.Category) && c.Name.Contains(input.Query) && c.IsActive)
                     .OrderByDescending(c => c.ModifiedDate)
                     .Skip(input.SkipCount)
                     .Take(input.FetchSize)

@@ -39,6 +39,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
             return new BaseListOutput<AppProductCategory>
             {
                 TotalRows = totalRows,
+                Query = input.Query,
                 SkipCount = input.SkipCount,
                 FetchSize = input.FetchSize,
                 Rows = result
