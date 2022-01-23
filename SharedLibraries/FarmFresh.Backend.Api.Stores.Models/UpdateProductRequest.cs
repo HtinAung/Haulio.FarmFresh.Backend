@@ -1,0 +1,23 @@
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace FarmFresh.Backend.Api.Stores.Models
+{
+    public class UpdateProductRequest
+    {
+        [Required]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+        public IFormFile Image { get; set; }
+        [Required]
+        public decimal Price { get; set; }
+        [Required]
+        public int AvailableAmount { get; set; }
+        [Required]
+        public Guid StoreId { get; set; }
+        [Required]
+        public Guid CategoryId { get; set; }
+    }
+}

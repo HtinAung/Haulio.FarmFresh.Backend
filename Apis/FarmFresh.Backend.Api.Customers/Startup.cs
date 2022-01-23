@@ -2,6 +2,7 @@ using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using FarmFresh.Backend.Api.Customers.Filters;
+using FarmFresh.Backend.Mappers.ApiRequests2Dtos;
 using FarmFresh.Backend.Mappers.Dtos2Entities;
 using FarmFresh.Backend.Repositories.Implementations;
 using FarmFresh.Backend.Repositories.Interfaces;
@@ -48,6 +49,7 @@ namespace FarmFresh.Backend.Api.Customers
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new Dto2EntitiesMapperConfiguration());
+                mc.AddProfile(new ApiRequests2DtosMapperConfiguration());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

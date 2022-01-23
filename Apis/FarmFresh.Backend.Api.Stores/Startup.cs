@@ -2,6 +2,7 @@ using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using FarmFresh.Backend.Api.Stores.Filters;
+using FarmFresh.Backend.Mappers.ApiRequests2Dtos;
 using FarmFresh.Backend.Mappers.Dtos2Entities;
 using FarmFresh.Backend.Repositories.Implementations;
 using FarmFresh.Backend.Repositories.Interfaces;
@@ -46,6 +47,7 @@ namespace FarmFresh.Backend.Api.Stores
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new Dto2EntitiesMapperConfiguration());
+                mc.AddProfile(new ApiRequests2DtosMapperConfiguration());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -75,7 +77,13 @@ namespace FarmFresh.Backend.Api.Stores
                     options.TokenValidationParameters.NameClaimType = "name";
                     options.TokenValidationParameters.RoleClaimType = "role";
                 });
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(GlobalModelValidatorFilter));
+            }).ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            }); ; ;
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FarmFresh.Backend.Api.Stores", Version = "v1" });

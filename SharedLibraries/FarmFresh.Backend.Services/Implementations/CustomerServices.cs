@@ -81,8 +81,10 @@ namespace FarmFresh.Backend.Services.Implementations.Customers
 
         public async Task MakeAnOrder(OrderHistoryDto dto)
         {
-            int currentAmount = await _productRepository.GetProductAvailableAmount(dto.StoreId, dto.ProductId.Value);
-            int newAmount = currentAmount - dto.Total;
+            var productEntity = await _productRepository.GetById(dto.StoreId, dto.ProductId.Value);
+            dto.Item = productEntity.Name;
+            dto.Price = productEntity.Price;
+            int newAmount = productEntity.AvailableAmount - dto.Total;
             var entity = _mapper.Map<OrderHistoryDto, AppOrderHistory>(dto);
             await _orderHistoryRepository.Insert(entity);
             await _productRepository.UpdateProductAvailableAmount(dto.StoreId, dto.ProductId.Value, newAmount);

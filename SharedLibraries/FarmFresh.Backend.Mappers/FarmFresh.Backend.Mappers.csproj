@@ -8,6 +8,8 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FarmFresh.Backend.Api.Customers.Models\FarmFresh.Backend.Api.Customers.Models.csproj" />
+    <ProjectReference Include="..\FarmFresh.Backend.Api.Stores.Models\FarmFresh.Backend.Api.Stores.Models.csproj" />
     <ProjectReference Include="..\FarmFresh.Backend.DataTransferObjects\FarmFresh.Backend.DataTransferObjects.csproj" />
     <ProjectReference Include="..\FarmFresh.Backend.Entities\FarmFresh.Backend.Entities.csproj" />
   </ItemGroup>
