@@ -34,11 +34,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22415E0C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmFresh.Backend.Crud.Tests", "Tests\FarmFresh.Backend.Repositories.Tests\FarmFresh.Backend.Crud.Tests.csproj", "{CC830867-2B0F-4BBE-B09A-F3638B70A26F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Api.Stores", "Apis\FarmFresh.Backend.Api.Stores\FarmFresh.Backend.Api.Stores.csproj", "{6A0C9A41-C0B2-434A-8585-40C9939EC449}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmFresh.Backend.Api.Stores", "Apis\FarmFresh.Backend.Api.Stores\FarmFresh.Backend.Api.Stores.csproj", "{6A0C9A41-C0B2-434A-8585-40C9939EC449}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Api.Customers", "Apis\FarmFresh.Backend.Api.Customers\FarmFresh.Backend.Api.Customers.csproj", "{AA35FE19-A6F9-464D-BB93-2E922D88321B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmFresh.Backend.Api.Customers", "Apis\FarmFresh.Backend.Api.Customers\FarmFresh.Backend.Api.Customers.csproj", "{AA35FE19-A6F9-464D-BB93-2E922D88321B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Mappers", "SharedLibraries\FarmFresh.Backend.Mappers\FarmFresh.Backend.Mappers.csproj", "{BFAD5758-BDDD-43CE-A7BD-65820D3255C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmFresh.Backend.Mappers", "SharedLibraries\FarmFresh.Backend.Mappers\FarmFresh.Backend.Mappers.csproj", "{BFAD5758-BDDD-43CE-A7BD-65820D3255C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Api.Customers.Models", "SharedLibraries\FarmFresh.Backend.Api.Customers.Models\FarmFresh.Backend.Api.Customers.Models.csproj", "{018F166C-9C07-47ED-B362-0F6E703EDBBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmFresh.Backend.Api.Stores.Models", "SharedLibraries\FarmFresh.Backend.Api.Stores.Models\FarmFresh.Backend.Api.Stores.Models.csproj", "{43E4B7D2-9B65-4374-BE0A-14F419F1286A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +94,14 @@ Global
 		{BFAD5758-BDDD-43CE-A7BD-65820D3255C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFAD5758-BDDD-43CE-A7BD-65820D3255C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFAD5758-BDDD-43CE-A7BD-65820D3255C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{018F166C-9C07-47ED-B362-0F6E703EDBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018F166C-9C07-47ED-B362-0F6E703EDBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018F166C-9C07-47ED-B362-0F6E703EDBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018F166C-9C07-47ED-B362-0F6E703EDBBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43E4B7D2-9B65-4374-BE0A-14F419F1286A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43E4B7D2-9B65-4374-BE0A-14F419F1286A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43E4B7D2-9B65-4374-BE0A-14F419F1286A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43E4B7D2-9B65-4374-BE0A-14F419F1286A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +118,8 @@ Global
 		{6A0C9A41-C0B2-434A-8585-40C9939EC449} = {39D3DD1C-3AAE-4064-96F4-BBE8000BEFD9}
 		{AA35FE19-A6F9-464D-BB93-2E922D88321B} = {39D3DD1C-3AAE-4064-96F4-BBE8000BEFD9}
 		{BFAD5758-BDDD-43CE-A7BD-65820D3255C6} = {13BEF497-8F8B-4E8D-A61C-514742CE1249}
+		{018F166C-9C07-47ED-B362-0F6E703EDBBA} = {13BEF497-8F8B-4E8D-A61C-514742CE1249}
+		{43E4B7D2-9B65-4374-BE0A-14F419F1286A} = {13BEF497-8F8B-4E8D-A61C-514742CE1249}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B342EEC2-1407-4A2C-BB1F-F225568FA39D}

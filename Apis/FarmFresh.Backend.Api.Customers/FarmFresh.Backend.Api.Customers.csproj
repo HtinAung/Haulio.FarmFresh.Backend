@@ -18,5 +18,12 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Api.Customers.Models\FarmFresh.Backend.Api.Customers.Models.csproj" />
+	  <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.DataTransferObjects\FarmFresh.Backend.DataTransferObjects.csproj" />
+	  <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Mappers\FarmFresh.Backend.Mappers.csproj" />
+	  <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Services\FarmFresh.Backend.Services.csproj" />
+	  <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Shared\FarmFresh.Backend.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

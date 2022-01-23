@@ -2,12 +2,11 @@
 using FarmFresh.Backend.DataTransferObjects;
 using FarmFresh.Backend.Entities;
 using FarmFresh.Backend.Repositories.Interfaces;
-using FarmFresh.Backend.Services.Interfaces.Stores;
+using FarmFresh.Backend.Services.Interfaces;
 using FarmFresh.Backend.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 

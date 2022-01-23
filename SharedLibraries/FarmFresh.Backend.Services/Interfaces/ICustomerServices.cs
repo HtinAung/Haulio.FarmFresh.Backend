@@ -3,7 +3,7 @@ using FarmFresh.Backend.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-namespace FarmFresh.Backend.Services.Interfaces.Stores
+namespace FarmFresh.Backend.Services.Interfaces
 {
     public interface ICustomerServices
     {

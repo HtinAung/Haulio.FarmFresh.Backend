@@ -7,9 +7,9 @@ using System.Text;
 
 namespace FarmFresh.Backend.Mappers.Dtos2Entities
 {
-    public class StoreMapperConfiguration:Profile
+    public class Dto2EntitiesMapperConfiguration:Profile
     {
-        public StoreMapperConfiguration()
+        public Dto2EntitiesMapperConfiguration()
         {
             Init();
         }
@@ -29,6 +29,14 @@ namespace FarmFresh.Backend.Mappers.Dtos2Entities
                 .ForMember(dest => dest.UserName, src => src.MapFrom(prop => prop.User != null ? prop.User.FullName ?? "-" : "-"));
 
             CreateMap<OrderHistoryDto, AppOrderHistory>();
+
+            CreateMap<AppStore, StoreDto>()
+                .ForMember(dest => dest.AdminUserName, src => src.MapFrom(prop => prop.User != null ? prop.User.FullName ?? "-" : "-"))
+                .ForMember(dest => dest.AdminUserId, src => src.MapFrom(prop => prop.UserId));
+
+            CreateMap<StoreDto, AppStore>()
+                .ForMember(dest => dest.UserId, src => src.MapFrom(prop => prop.AdminUserId));
+
 
         }
     }

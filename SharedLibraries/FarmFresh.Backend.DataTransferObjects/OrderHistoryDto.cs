@@ -13,5 +13,6 @@ namespace FarmFresh.Backend.DataTransferObjects
         public Guid StoreId { get; set; }
         public string UserName { get; set; }
         public string StoreName { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

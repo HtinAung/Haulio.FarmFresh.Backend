@@ -2,11 +2,10 @@
 using FarmFresh.Backend.DataTransferObjects;
 using FarmFresh.Backend.Entities;
 using FarmFresh.Backend.Repositories.Interfaces;
-using FarmFresh.Backend.Services.Interfaces.Stores;
+using FarmFresh.Backend.Services.Interfaces;
 using FarmFresh.Backend.Shared;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FarmFresh.Backend.Services.Implementations.Stores
@@ -16,12 +15,14 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
         private readonly IProductRepository _productRepository;
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IOrderHistoryRepository _orderHistoryRepository;
+        private readonly IStoreRepository _storeRepository;
         private readonly BlobStorageHelper _blobStorageHelper;
         private readonly IMapper _mapper;
         public StoreServices(
                 IProductRepository productRepository,
                 IProductCategoryRepository productCategoryRepository,
                 IOrderHistoryRepository orderHistoryRepository,
+                IStoreRepository storeRepository,
                 BlobStorageHelper blobStorageHelper,
                 IMapper mapper
             )
@@ -29,6 +30,7 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _orderHistoryRepository = orderHistoryRepository;
+            _storeRepository = storeRepository;
             _blobStorageHelper = blobStorageHelper;
             _mapper = mapper;
         }
@@ -79,6 +81,14 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
             dtoResult.Rows = _mapper.Map<IEnumerable<AppOrderHistory>, IEnumerable<OrderHistoryDto>>(rawResult.Rows);
             return dtoResult;
         }
+
+        public async Task CreateStore(StoreDto dto)
+        {
+            var entity = _mapper.Map<StoreDto, AppStore>(dto);
+            Guid storeId = await _storeRepository.Insert(entity);
+            await _storeRepository.TieAdminUserWithStore(storeId, entity.UserId);
+        }
+
 
         public async Task InsertProduct(ProductDto dto)
         {

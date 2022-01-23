@@ -1,3 +1,14 @@
+using AutoMapper;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using FarmFresh.Backend.Api.Stores.Filters;
+using FarmFresh.Backend.Mappers.Dtos2Entities;
+using FarmFresh.Backend.Repositories.Implementations;
+using FarmFresh.Backend.Repositories.Interfaces;
+using FarmFresh.Backend.Services.Implementations.Stores;
+using FarmFresh.Backend.Services.Interfaces;
+using FarmFresh.Backend.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,32 +34,85 @@ namespace FarmFresh.Backend.Api.Stores
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new Dto2EntitiesMapperConfiguration());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserAddressRepository, UserAddressRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IStoreServices, StoreServices>();
+            services.AddSingleton<BlobStorageHelper>((sp) =>
+            {
+                string blobConnectionString = Configuration.GetConnectionString("StorageAccount");
+                string blobContainer = Configuration["Mode"];
+                var blobContainerClient = new BlobContainerClient(blobConnectionString, blobContainer);
+                blobContainerClient.CreateIfNotExistsAsync(publicAccessType: PublicAccessType.Blob).Wait();
+                return new BlobStorageHelper(blobContainerClient);
+            });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = Configuration["IdentityServer:BaseAddress"];
+                    options.Audience = Configuration["IdentityServer:Audience"];
+                    options.TokenValidationParameters.NameClaimType = "name";
+                    options.TokenValidationParameters.RoleClaimType = "role";
+                });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FarmFresh.Backend.Api.Stores", Version = "v1" });
+                c.AddSecurityDefinition(GlobalConstants.CustomerSwaggerSecurityDefinitionKey, new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri("https://localhost:6000/connect/authorize"),
+                            TokenUrl = new Uri("https://localhost:6000/connect/token"),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "store_services","Store Services Api" }
+                            }
+                        }
+                    }
+                });
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FarmFresh.Backend.Api.Stores v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "FarmFresh.Backend.Api.Stores v1");
+                    c.OAuthClientId(Configuration["IdentityServer:ClientId"]);
+                    c.OAuthClientSecret(Configuration["IdentityServer:ClientSecret"]);
+                    c.OAuthAppName("Store Services");
+                    c.OAuthUsePkce();
+
+                });
             }
 
+
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
