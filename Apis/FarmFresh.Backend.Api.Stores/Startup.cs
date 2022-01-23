@@ -9,6 +9,7 @@ using FarmFresh.Backend.Services.Implementations.Stores;
 using FarmFresh.Backend.Services.Interfaces;
 using FarmFresh.Backend.Shared;
 using FarmFresh.Backend.Storages.SQLServer;
+using GlobalExceptionHandler.WebApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -98,24 +100,32 @@ namespace FarmFresh.Backend.Api.Stores
         }
 
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            if (env.IsDevelopment())
+
+            app.UseGlobalExceptionHandler(options =>
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
+                options.ContentType = "application/json";
+                options.ResponseBody((exception, httpContext) => JsonConvert.SerializeObject(new
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "FarmFresh.Backend.Api.Stores v1");
-                    c.OAuthClientId(Configuration["IdentityServer:ClientId"]);
-                    c.OAuthClientSecret(Configuration["IdentityServer:ClientSecret"]);
-                    c.OAuthAppName("Store Services");
-                    c.OAuthUsePkce();
-
+                    errorMessage = exception.Message
+                }));
+                options.OnError((exception, httpContext) =>
+                {
+                    logger.LogError(exception.ToString());
+                    return Task.CompletedTask;
                 });
-            }
+            });
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FarmFresh.Backend.Api.Stores v1");
+                c.OAuthClientId(Configuration["IdentityServer:ClientId"]);
+                c.OAuthClientSecret(Configuration["IdentityServer:ClientSecret"]);
+                c.OAuthAppName("Store Services");
+                c.OAuthUsePkce();
 
-
+            });
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();

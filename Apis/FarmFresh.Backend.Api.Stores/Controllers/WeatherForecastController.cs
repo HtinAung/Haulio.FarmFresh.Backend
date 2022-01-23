@@ -28,6 +28,7 @@ namespace FarmFresh.Backend.Api.Stores.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            _logger.LogInformation("Entering /WeatherForecast endpoint...");
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -36,6 +37,12 @@ namespace FarmFresh.Backend.Api.Stores.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet(nameof(ThrowException))]
+        public void ThrowException()
+        {
+            throw new InvalidOperationException("This operation is not allowed!");
         }
     }
 }
