@@ -1,6 +1,6 @@
 using System;
 
-namespace FarmFresh.Backend.Api
+namespace FarmFresh.Backend.Api.Stores
 {
     public class WeatherForecast
     {

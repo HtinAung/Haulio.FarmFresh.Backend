@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FarmFresh.Backend.Api
+namespace FarmFresh.Backend.Api.Stores
 {
     public class Startup
     {
@@ -26,11 +26,10 @@ namespace FarmFresh.Backend.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FarmFresh.Backend.Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FarmFresh.Backend.Api.Stores", Version = "v1" });
             });
         }
 
@@ -41,7 +40,7 @@ namespace FarmFresh.Backend.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FarmFresh.Backend.Api v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FarmFresh.Backend.Api.Stores v1"));
             }
 
             app.UseHttpsRedirection();

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FarmFresh.Backend.Api
+namespace FarmFresh.Backend.Api.Stores
 {
     public class Program
     {

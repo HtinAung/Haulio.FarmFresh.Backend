@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FarmFresh.Backend.Api.Controllers
+namespace FarmFresh.Backend.Api.Stores.Controllers
 {
     [ApiController]
     [Route("[controller]")]
