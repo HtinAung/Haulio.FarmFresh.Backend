@@ -7,6 +7,9 @@ namespace FarmFresh.Backend.Api.Stores.Models
     public class UpdateProductRequest
     {
         [Required]
+        public Guid Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -15,6 +18,9 @@ namespace FarmFresh.Backend.Api.Stores.Models
         public decimal Price { get; set; }
         [Required]
         public int AvailableAmount { get; set; }
+
+        public string ImageUrl { get; set; }
+
         [Required]
         public Guid StoreId { get; set; }
         [Required]

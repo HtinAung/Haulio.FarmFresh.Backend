@@ -4,17 +4,14 @@ using FarmFresh.Backend.DataTransferObjects;
 using FarmFresh.Backend.Services.Interfaces;
 using FarmFresh.Backend.Shared;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace FarmFresh.Backend.Api.Stores.Controllers
+namespace FarmFresh.Backend.Api.Stores.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -35,6 +32,15 @@ namespace FarmFresh.Backend.Api.Stores.Controllers
             _mapper = mapper;
             _logger = logger;
         }
+
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> Get(Guid productId)
+        {
+            _logger.LogInformation($"[GET] /api/v1/products/{productId.ToString()}");
+            var response = await _storeServices.GetProduct(productId);
+            return Ok(response);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]ProductListInput request)

@@ -30,12 +30,32 @@ namespace FarmFresh.Backend.Repositories.Implementations
 
         public async Task<BaseListOutput<AppProductCategory>> GetAll(BaseListInput input)
         {
-            int totalRows = await _context.ProductCategories.CountAsync(c => c.IsActive);
-            var result = await _context.ProductCategories.Where(c => c.IsActive)
-                .Skip(input.SkipCount)
-                .Take(input.FetchSize)
-                .AsNoTracking()
-                .ToListAsync();
+            int totalRows = 0;
+            List<AppProductCategory> result = new List<AppProductCategory>();
+
+            input.Query = input.Query.Trim();
+
+            if (string.IsNullOrEmpty(input.Query))
+            {
+
+                totalRows = await _context.ProductCategories.CountAsync(c => c.IsActive);
+                result = await _context.ProductCategories.Where(c => c.IsActive)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+
+                totalRows = await _context.ProductCategories.CountAsync(c => c.IsActive && c.Name.Contains(input.Query));
+                result = await _context.ProductCategories.Where(c => c.IsActive && c.Name.Contains(input.Query))
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+
             return new BaseListOutput<AppProductCategory>
             {
                 TotalRows = totalRows,

@@ -9,6 +9,7 @@ namespace FarmFresh.Backend.Services.Interfaces
     {
         Task<BaseListOutput<ProductCategoryDto>> GetProductCategories(BaseListInput input);
         Task<BaseListOutput<ProductDto>> GetProducts(ProductListInput input);
+        Task<ProductDto> GetProduct(Guid productId);
         Task<BaseListOutput<OrderHistoryDto>> GetOrderHistories(Guid storeId, BaseListInput input);
         Task CreateStore(StoreDto dto);
         Task InsertProduct(ProductDto dto);

@@ -4,6 +4,7 @@ using FarmFresh.Backend.Shared;
 using FarmFresh.Backend.Storages.SQLServer;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,19 +25,45 @@ namespace FarmFresh.Backend.Repositories.Implementations
             {
                 throw new Exception($"User with id {userId} couldn't be found / been de-activated");
             }
-            int totalRows = await _context
-                .OrderHistories
-                .CountAsync(c => c.UserId == userId && c.IsActive);
 
-            var result = await _context
-                .OrderHistories
-                .Where(c => c.UserId == userId && c.IsActive)
-                .Skip(input.SkipCount)
-                .Take(input.FetchSize)
-                .Include(c => c.User)
-                .Include(c => c.Store)
-                .AsNoTracking()
-                .ToListAsync();
+            int totalRows = 0;
+            List<AppOrderHistory> result = new List<AppOrderHistory>();
+
+            input.Query = input.Query.Trim();
+
+            if (string.IsNullOrEmpty(input.Query))
+            {
+                totalRows = await _context
+                                  .OrderHistories
+                                  .CountAsync(c => c.UserId == userId && c.IsActive);
+
+                result = await _context
+                    .OrderHistories
+                    .Where(c => c.UserId == userId && c.IsActive)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .Include(c => c.User)
+                    .Include(c => c.Store)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+                totalRows = await _context
+                                 .OrderHistories
+                                 .CountAsync(c => c.UserId == userId && c.IsActive && c.Item.Contains(input.Query));
+
+                result = await _context
+                    .OrderHistories
+                    .Where(c => c.UserId == userId && c.IsActive && c.Item.Contains(input.Query))
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .Include(c => c.User)
+                    .Include(c => c.Store)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+          
 
             return new BaseListOutput<AppOrderHistory>
             {
@@ -54,20 +81,44 @@ namespace FarmFresh.Backend.Repositories.Implementations
             {
                 throw new Exception($"Store with id {storeId} couldn't be found / been de-activated");
             }
+            int totalRows = 0;
+            List<AppOrderHistory> result = new List<AppOrderHistory>();
 
-            int totalRows = await _context
-                .OrderHistories
-                .CountAsync(c => c.StoreId == storeId && c.IsActive);
+            input.Query = input.Query.Trim();
 
-            var result = await _context
-                .OrderHistories
-                .Where(c => c.StoreId == storeId && c.IsActive)
-                .Skip(input.SkipCount)
-                .Take(input.FetchSize)
-                .Include(c => c.User)
-                .Include(c => c.Store)
-                .AsNoTracking()
-                .ToListAsync();
+            if (string.IsNullOrEmpty(input.Query))
+            {
+                totalRows = await _context
+                                  .OrderHistories
+                                  .CountAsync(c => c.StoreId == storeId && c.IsActive);
+
+                result = await _context
+                    .OrderHistories
+                    .Where(c => c.StoreId == storeId && c.IsActive)
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .Include(c => c.User)
+                    .Include(c => c.Store)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            else
+            {
+                totalRows = await _context
+                                  .OrderHistories
+                                  .CountAsync(c => c.StoreId == storeId && c.IsActive && c.Item.Contains(input.Query));
+
+                result = await _context
+                    .OrderHistories
+                    .Where(c => c.StoreId == storeId && c.IsActive && c.Item.Contains(input.Query))
+                    .Skip(input.SkipCount)
+                    .Take(input.FetchSize)
+                    .Include(c => c.User)
+                    .Include(c => c.Store)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+          
 
             return new BaseListOutput<AppOrderHistory>
             {

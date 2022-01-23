@@ -68,6 +68,13 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
             return dtoResult;
         }
 
+        public async Task<ProductDto> GetProduct(Guid productId)
+        {
+            var rawResult = await _productRepository.GetById(productId);
+            var dtoResult = _mapper.Map<AppProduct, ProductDto>(rawResult);
+            return dtoResult;
+        }
+
         public async Task<BaseListOutput<OrderHistoryDto>> GetOrderHistories(Guid storeId, BaseListInput input)
         {
             BaseListOutput<AppOrderHistory> rawResult = await _orderHistoryRepository.GetAllByStore(storeId, input);
