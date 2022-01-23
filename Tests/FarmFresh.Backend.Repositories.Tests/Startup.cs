@@ -12,6 +12,9 @@ using FarmFresh.Backend.Repositories.Interfaces;
 using FarmFresh.Backend.Repositories.Implementations;
 using FarmFresh.Backend.Entities;
 using Microsoft.AspNetCore.Identity;
+using FarmFresh.Backend.Shared;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace FarmFresh.Backend.Crud.Tests
 {
@@ -41,6 +44,16 @@ namespace FarmFresh.Backend.Crud.Tests
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserAddressRepository, UserAddressRepository>();
             services.AddScoped<IStoreRepository, StoreRepository>();
+            
+            services.AddSingleton<BlobStorageHelper>((sp) =>
+            {
+                string blobConnectionString = Configuration.GetConnectionString("StorageAccount");
+                string blobContainer = Configuration["Mode"];
+                var blobContainerClient = new BlobContainerClient(blobConnectionString, blobContainer);
+                blobContainerClient.CreateIfNotExistsAsync(publicAccessType: PublicAccessType.Blob).Wait();
+                return new BlobStorageHelper(blobContainerClient);
+            });
+            
         }
     }
 }
