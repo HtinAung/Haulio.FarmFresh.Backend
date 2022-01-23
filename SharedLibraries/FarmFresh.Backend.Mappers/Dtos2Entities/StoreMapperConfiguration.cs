@@ -24,6 +24,12 @@ namespace FarmFresh.Backend.Mappers.Dtos2Entities
 
             CreateMap<AppProductCategory, ProductCategoryDto>().ReverseMap();
 
+            CreateMap<AppOrderHistory, OrderHistoryDto>()
+                .ForMember(dest => dest.StoreName, src => src.MapFrom(prop => prop.Store != null ? prop.Store.Name ?? "-" : "-"))
+                .ForMember(dest => dest.UserName, src => src.MapFrom(prop => prop.User != null ? prop.User.FullName ?? "-" : "-"));
+
+            CreateMap<OrderHistoryDto, AppOrderHistory>();
+
         }
     }
 }

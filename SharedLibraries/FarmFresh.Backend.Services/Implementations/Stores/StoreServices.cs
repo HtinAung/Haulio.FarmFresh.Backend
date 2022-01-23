@@ -15,17 +15,20 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
     {
         private readonly IProductRepository _productRepository;
         private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IOrderHistoryRepository _orderHistoryRepository;
         private readonly BlobStorageHelper _blobStorageHelper;
         private readonly IMapper _mapper;
         public StoreServices(
                 IProductRepository productRepository,
                 IProductCategoryRepository productCategoryRepository,
+                IOrderHistoryRepository orderHistoryRepository,
                 BlobStorageHelper blobStorageHelper,
                 IMapper mapper
             )
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
+            _orderHistoryRepository = orderHistoryRepository;
             _blobStorageHelper = blobStorageHelper;
             _mapper = mapper;
         }
@@ -61,7 +64,20 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
             };
             dtoResult.Rows = _mapper.Map<IEnumerable<AppProduct>, IEnumerable<ProductDto>>(rawResult.Rows);
             return dtoResult;
+        }
 
+        public async Task<BaseListOutput<OrderHistoryDto>> GetOrderHistories(Guid storeId, BaseListInput input)
+        {
+            BaseListOutput<AppOrderHistory> rawResult = await _orderHistoryRepository.GetAllByStore(storeId, input);
+            BaseListOutput<OrderHistoryDto> dtoResult = new BaseListOutput<OrderHistoryDto>
+            {
+                FetchSize = rawResult.FetchSize,
+                Query = rawResult.Query,
+                SkipCount = rawResult.SkipCount,
+                TotalRows = rawResult.TotalRows
+            };
+            dtoResult.Rows = _mapper.Map<IEnumerable<AppOrderHistory>, IEnumerable<OrderHistoryDto>>(rawResult.Rows);
+            return dtoResult;
         }
 
         public async Task InsertProduct(ProductDto dto)
