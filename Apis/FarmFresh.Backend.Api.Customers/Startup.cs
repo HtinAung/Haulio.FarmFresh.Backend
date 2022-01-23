@@ -9,11 +9,13 @@ using FarmFresh.Backend.Services.Implementations.Customers;
 using FarmFresh.Backend.Services.Implementations.Stores;
 using FarmFresh.Backend.Services.Interfaces;
 using FarmFresh.Backend.Shared;
+using FarmFresh.Backend.Storages.SQLServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +23,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,6 +41,8 @@ namespace FarmFresh.Backend.Api.Customers
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new Dto2EntitiesMapperConfiguration());
@@ -45,6 +50,8 @@ namespace FarmFresh.Backend.Api.Customers
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+            services.AddDbContext<ApplicationDbContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
@@ -79,11 +86,11 @@ namespace FarmFresh.Backend.Api.Customers
                     {
                         AuthorizationCode = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri("https://localhost:6000/connect/authorize"),
-                            TokenUrl = new Uri("https://localhost:6000/connect/token"),
+                            AuthorizationUrl = new Uri($"{Configuration["IdentityServer:BaseAddress"]}/connect/authorize"),
+                            TokenUrl = new Uri($"{Configuration["IdentityServer:BaseAddress"]}/connect/token"),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "customer_services","Customer Services Api" }
+                                { GlobalConstants.CustomerServiceApiScope,"Customer Services Api" }
                             }
                         }
                     }

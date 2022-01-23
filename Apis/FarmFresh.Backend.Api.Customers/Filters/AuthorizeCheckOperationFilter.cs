@@ -33,7 +33,7 @@ namespace FarmFresh.Backend.Api.Customers.Filters
                                     Id = GlobalConstants.CustomerSwaggerSecurityDefinitionKey
                                 }
                             },
-                            GlobalConstants.ApiScopes
+                            new string[] { GlobalConstants.CustomerServiceApiScope }
                         }
                     }
                 };

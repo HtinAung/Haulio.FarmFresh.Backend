@@ -37,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.DataTransferObjects\FarmFresh.Backend.DataTransferObjects.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Entities\FarmFresh.Backend.Entities.csproj" />
+    <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Mappers\FarmFresh.Backend.Mappers.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Repositories\FarmFresh.Backend.Repositories.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Services\FarmFresh.Backend.Services.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Shared\FarmFresh.Backend.Shared.csproj" />
