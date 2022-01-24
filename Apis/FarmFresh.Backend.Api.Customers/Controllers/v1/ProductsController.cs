@@ -10,23 +10,20 @@ using System.Threading.Tasks;
 
 namespace FarmFresh.Backend.Api.Customers.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize(Roles = GlobalConstants.CustomerUserRoleName)]
     public class ProductsController : ControllerBase
     {
         private readonly ICustomerServices _customerServices;
-        private readonly IMapper _mapper;
         private readonly ILogger<ProductsController> _logger;
 
         public ProductsController(
                 ICustomerServices customerServices,
-                IMapper mapper,
                 ILogger<ProductsController> logger
             )
         {
             _customerServices = customerServices;
-            _mapper = mapper;
             _logger = logger;
         }
 

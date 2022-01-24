@@ -1,0 +1,4 @@
+﻿Identity Server: https://localhost:44310
+Ocelot Api Gateway: https://localhost:44320
+Customers Api: https://localhost:44311
+Stores Api: https://localhost:44312

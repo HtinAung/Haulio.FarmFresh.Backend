@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 namespace FarmFresh.Backend.Api.Customers.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize(Roles = GlobalConstants.CustomerUserRoleName)]
 

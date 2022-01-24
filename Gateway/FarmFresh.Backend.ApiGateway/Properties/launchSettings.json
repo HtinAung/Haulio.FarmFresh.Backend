@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "FarmFresh.Backend.ApiGateway": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:44320;",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
