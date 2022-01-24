@@ -1,42 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.AspNetCore.Authorization;
-using System;
-
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Collections.Generic;
 namespace FarmFresh.Backend.Api.Customers.Filters
 {
-    public class AuthorizeCheckOperationFilter : IOperationFilter
+    public class GlobalModelValidatorFilter : ActionFilterAttribute
     {
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            bool hasAuthorize =
-                context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
-                context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
-            if (hasAuthorize)
+            if (!context.ModelState.IsValid)
             {
-                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
-
-
-                operation.Security = new List<OpenApiSecurityRequirement>
+                List<string> errors = new List<string>();
+                foreach (var value in context.ModelState.Values)
                 {
-                    new OpenApiSecurityRequirement
+                    foreach (var error in value.Errors)
                     {
-                         {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = GlobalConstants.CustomerSwaggerSecurityDefinitionKey
-                                }
-                            },
-                            new string[] { GlobalConstants.CustomerServiceApiScope }
-                        }
+                        errors.Add(error.ErrorMessage);
                     }
-                };
+                }
+                context.Result = new BadRequestObjectResult(new
+                {
+                    invalidValidations = errors
+                });
             }
         }
     }

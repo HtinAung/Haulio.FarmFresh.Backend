@@ -32,6 +32,12 @@ namespace FarmFresh.Backend.Services.Implementations.Customers
             _mapper = mapper;
         }
 
+        public async Task<ProductDto> GetProduct(Guid productId)
+        {
+            var rawResult = await _productRepository.GetById(productId);
+            var dtoResult = _mapper.Map<AppProduct, ProductDto>(rawResult);
+            return dtoResult;
+        }
 
         public async Task<BaseListOutput<ProductDto>> GetProducts(
                 ProductListInput input

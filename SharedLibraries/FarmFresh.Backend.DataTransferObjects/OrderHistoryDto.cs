@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace FarmFresh.Backend.DataTransferObjects
 {
     public class OrderHistoryDto
@@ -13,6 +12,6 @@ namespace FarmFresh.Backend.DataTransferObjects
         public Guid StoreId { get; set; }
         public string UserName { get; set; }
         public string StoreName { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }
 }
