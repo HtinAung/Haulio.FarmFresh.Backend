@@ -1,0 +1,82 @@
+﻿@model IdentityServerHost.Quickstart.UI.RegisterStoreViewModel
+
+@{
+	ViewData["Title"] = "Create Store and User Admin";
+}
+
+
+<h3>Create Store and User Admin</h3>
+<hr />
+<p class="lead text-warning my-2">
+	Please use this user admin to login to your Store
+</p>
+
+<div class="row">
+	<div class="col-md-5">
+		<form asp-action="RegisterStore">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="StoreName" class="control-label"></label>
+				<input asp-for="StoreName" class="form-control" />
+				<span asp-validation-for="StoreName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Email" class="control-label"></label>
+				<input asp-for="Email" class="form-control" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Password" class="control-label"></label>
+				<input asp-for="Password" class="form-control" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="FullName" class="control-label"></label>
+				<input asp-for="FullName" class="form-control" />
+				<span asp-validation-for="FullName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="AddressLine" class="control-label"></label>
+				<input asp-for="AddressLine" class="form-control" />
+				<span asp-validation-for="AddressLine" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="City" class="control-label"></label>
+				<input asp-for="City" class="form-control" />
+				<span asp-validation-for="City" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Region" class="control-label"></label>
+				<input asp-for="Region" class="form-control" />
+				<span asp-validation-for="Region" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Country" class="control-label"></label>
+				<select class="form-control" name="Country" id="Country">
+					<option value="Indonesia">Indonesia</option>
+					<option value="Singapore">Singapore</option>
+					<option value="Malaysia">Malaysia</option>
+
+				</select>
+				<span asp-validation-for="Country" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="PostalCode" class="control-label"></label>
+				<input asp-for="PostalCode" class="form-control" />
+				<span asp-validation-for="PostalCode" class="text-danger"></span>
+			</div>
+			<input type="hidden" asp-for="ReturnUrl" />
+			<div class="form-group">
+				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	Already have an account? <a asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Login here.</a>
+</div>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
