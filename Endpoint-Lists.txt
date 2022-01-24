@@ -1,4 +1,25 @@
 ﻿Identity Server: https://localhost:44310
-Ocelot Api Gateway: https://localhost:44320
 Customers Api: https://localhost:44311
 Stores Api: https://localhost:44312
+Ocelot Api Gateway: https://localhost:44320
+
+
+Below are the summary of the endpoints accessed through Api Gateway (no swagger for ocelot gateway)
+
+1. Stores
+- [GET] Categories					=> https://localhost:44320/api/v1/stores/categories
+- [GET] Order Histories				=> https://localhost:44320/api/v1/stores/orderhistories
+- [GET] Product By Id				=> https://localhost:44320/api/v1/stores/products/{productId}
+- [GET] Product All					=> https://localhost:44320/api/v1/stores/products
+- [POST] Add Product				=> https://localhost:44320/api/v1/stores/products
+- [PUT] Update Product				=> https://localhost:44320/api/v1/stores/products
+- [Delete] Delete Product By Id		=> https://localhost:44320/api/v1/stores/products/{productId}
+
+2. Customers
+- [GET] Categories					=> https://localhost:44320/api/v1/customers/categories
+- [GET] Order Histories				=> https://localhost:44320/api/v1/customers/orderhistories
+- [POST] Make An Order				=> https://localhost:44320/api/v1/customers/orders
+- [GET] Products All				=> https://localhost:44320/api/v1/customers/products
+- [GET] Product By Id 				=> https://localhost:44320/api/v1/customers/products/{productId}
+
+

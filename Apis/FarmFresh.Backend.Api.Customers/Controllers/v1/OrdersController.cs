@@ -26,15 +26,17 @@ namespace FarmFresh.Backend.Api.Customers.Controllers.v1
                 IMapper mapper,
                 ILogger<OrdersController> logger
             )
-        {
+        {   
             _customerServices = customerServices;
             _mapper = mapper;
             _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] CreateOrderRequest request)
+        public async Task<IActionResult> Post([FromBody] CreateOrderRequest request)
         {
+            if (request.Total <= 0)
+                throw new Exception("Invalid total order");
             _logger.LogInformation($"[POST] /api/v1/orders => {JsonConvert.SerializeObject(request)}");
 
             string userId = User.FindFirstValue("sub");
