@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FarmFresh.Backend.Api.Stores.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = GlobalConstants.StoreAdminRoleName)]
     public class OrderHistoriesController : ControllerBase
     {
         private readonly IStoreServices _storeServices;
@@ -30,11 +31,13 @@ namespace FarmFresh.Backend.Api.Stores.Controllers.v1
             _logger = logger;
         }
 
-        [HttpGet("{storeId}")]
-        public async Task<IActionResult> Get(Guid storeId, [FromQuery] ProductListInput request)
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] ProductListInput request)
         {
-            _logger.LogInformation($"[GET] /api/v1/OrderHistories/{storeId.ToString()} => {JsonConvert.SerializeObject(request)}");
-            var response = await _storeServices.GetOrderHistories(storeId, request);
+            string userId = User.FindFirstValue("sub");
+            var user = await _storeServices.GetUserById(Guid.Parse(userId));
+            _logger.LogInformation($"[GET] /api/v1/OrderHistories/{user.StoreId.Value.ToString()} => {JsonConvert.SerializeObject(request)}");
+            var response = await _storeServices.GetOrderHistories(user.StoreId.Value, request);
             return Ok(response);
         }
     }

@@ -16,8 +16,7 @@ namespace FarmFresh.Backend.Api.Stores.Models
         public decimal Price { get; set; }
         [Required]
         public int AvailableAmount { get; set; }
-        [Required]
-        public Guid StoreId { get; set; }
+        
         [Required]
         public Guid CategoryId { get; set; }
     }

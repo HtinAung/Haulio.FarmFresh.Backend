@@ -9,13 +9,14 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FarmFresh.Backend.Api.Stores.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = GlobalConstants.StoreAdminRoleName)]
     public class ProductsController : ControllerBase
     {
         private readonly IStoreServices _storeServices;
@@ -55,8 +56,11 @@ namespace FarmFresh.Backend.Api.Stores.Controllers.v1
         public async Task<IActionResult> Post([FromForm]CreateNewProductRequest request)
         {
             _logger.LogInformation($"[POST] /api/v1/products => {JsonConvert.SerializeObject(request)}");
-            
+
+            string userId = User.FindFirstValue("sub");
+            var user = await _storeServices.GetUserById(Guid.Parse(userId));
             var dto = _mapper.Map<ProductDto>(request);
+            dto.StoreId = user.StoreId.Value;
             var stream = request.Image.OpenReadStream();
 
             dto.UploadedImage = stream;
@@ -70,9 +74,11 @@ namespace FarmFresh.Backend.Api.Stores.Controllers.v1
         public async Task<IActionResult> Put([FromForm] UpdateProductRequest request)
         {
             _logger.LogInformation($"[PUT] /api/v1/products => {JsonConvert.SerializeObject(request)}");
+            string userId = User.FindFirstValue("sub");
+            var user = await _storeServices.GetUserById(Guid.Parse(userId));
             var dto = _mapper.Map<ProductDto>(request);
-
-            if(request.Image != null)
+            dto.StoreId = user.StoreId.Value;
+            if (request.Image != null)
             {
                 var stream = request.Image.OpenReadStream();
                 dto.UploadedImage = stream;

@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
 
 namespace FarmFresh.Backend.Api.Stores.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = GlobalConstants.StoreAdminRoleName)]
     public class CategoriesController : ControllerBase
     {
         private readonly IStoreServices _storeServices;

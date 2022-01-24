@@ -36,6 +36,7 @@ namespace FarmFresh.Backend.Repositories.Implementations
             var entity = await _context
                .Users
                .Include(c => c.Addresses)
+               .Include(c => c.Store)
                .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
             if (entity == null)
             {

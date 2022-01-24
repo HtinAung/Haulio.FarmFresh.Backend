@@ -16,12 +16,14 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IOrderHistoryRepository _orderHistoryRepository;
         private readonly IStoreRepository _storeRepository;
+        private readonly IUserRepository _userRepository;
         private readonly BlobStorageHelper _blobStorageHelper;
         private readonly IMapper _mapper;
         public StoreServices(
                 IProductRepository productRepository,
                 IProductCategoryRepository productCategoryRepository,
                 IOrderHistoryRepository orderHistoryRepository,
+                IUserRepository userRepository,
                 IStoreRepository storeRepository,
                 BlobStorageHelper blobStorageHelper,
                 IMapper mapper
@@ -31,6 +33,7 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
             _productCategoryRepository = productCategoryRepository;
             _orderHistoryRepository = orderHistoryRepository;
             _storeRepository = storeRepository;
+            _userRepository = userRepository;
             _blobStorageHelper = blobStorageHelper;
             _mapper = mapper;
         }
@@ -67,7 +70,7 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
             dtoResult.Rows = _mapper.Map<IEnumerable<AppProduct>, IEnumerable<ProductDto>>(rawResult.Rows);
             return dtoResult;
         }
-
+      
         public async Task<ProductDto> GetProduct(Guid productId)
         {
             var rawResult = await _productRepository.GetById(productId);
@@ -88,7 +91,12 @@ namespace FarmFresh.Backend.Services.Implementations.Stores
             dtoResult.Rows = _mapper.Map<IEnumerable<AppOrderHistory>, IEnumerable<OrderHistoryDto>>(rawResult.Rows);
             return dtoResult;
         }
-
+        public async Task<UserDto> GetUserById(Guid id)
+        {
+            var entity = await _userRepository.GetUserById(id);
+            var dto = _mapper.Map<AppUser, UserDto>(entity);
+            return dto;
+        }
         public async Task CreateStore(StoreDto dto)
         {
             var entity = _mapper.Map<StoreDto, AppStore>(dto);

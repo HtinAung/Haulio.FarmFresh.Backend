@@ -22,8 +22,6 @@ namespace FarmFresh.Backend.Api.Stores.Models
         public string ImageUrl { get; set; }
 
         [Required]
-        public Guid StoreId { get; set; }
-        [Required]
         public Guid CategoryId { get; set; }
     }
 }
