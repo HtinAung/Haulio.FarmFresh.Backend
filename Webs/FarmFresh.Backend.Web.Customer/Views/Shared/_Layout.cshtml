@@ -12,9 +12,11 @@
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3 fixed-top">
 			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Farm Fresh</a>
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+					<img src="~/assets/FarmFresh Logo.png" alt="Logo" style="width:80px;">
+				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -24,10 +26,10 @@
 						@if (User.Identity.IsAuthenticated)
 						{
 							<li class="nav-item">
-								<a class="nav-link text-white" href="#">@User.Identity.Name</a>
+								<a class="nav-link text-dark" href="#">@User.Identity.Name</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link text-white" asp-area="" asp-controller="Auth" asp-action="Logout">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">
 								<span class="fa fa-sign-out-alt"></span> Logout
 								</a>
 							</li>
@@ -35,7 +37,7 @@
 						else
 						{
 							<li class="nav-item">
-								<a class="nav-link text-white" asp-area="" asp-controller="Auth" asp-action="Login">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">
 								  <span class="fa fa-sign-in-alt"></span> Login
 								</a>
 							</li>
@@ -43,12 +45,12 @@
 					</ul>
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link text-white" asp-area="" asp-controller="Products" asp-action="Index">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">
 								<span class="fa fa-store"></span> Buy Products
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-white" asp-area="" asp-controller="OrderHistories" asp-action="Index">
+							<a class="nav-link text-dark" asp-area="" asp-controller="OrderHistories" asp-action="Index">
 								<span class="fa fa-history"></span> Order Histories
 							</a>
 						</li>

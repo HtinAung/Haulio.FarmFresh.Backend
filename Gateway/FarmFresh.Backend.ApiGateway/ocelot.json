@@ -18,7 +18,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/orderhistories",
+      "DownstreamPathTemplate": "/api/v1/orderhistories/",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -27,7 +27,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/v1/customers/orderhistories",
-      "UpstreamHttpMethod": [ "GET"],
+      "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
@@ -74,7 +74,7 @@
           "Port": 44311
         }
       ],
-      "UpstreamPathTemplate": "/api/v1/customers/products/{productId}",
+      "UpstreamPathTemplate": "/api/v1/customers/products/{productId}/item",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",

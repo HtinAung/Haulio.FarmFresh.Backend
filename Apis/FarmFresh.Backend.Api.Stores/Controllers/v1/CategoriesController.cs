@@ -29,6 +29,7 @@ namespace FarmFresh.Backend.Api.Stores.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]BaseListInput request)
         {
+            request.Query = string.IsNullOrEmpty(request.Query) ? string.Empty : request.Query;
             _logger.LogInformation($"[GET] /api/v1/categories => {JsonConvert.SerializeObject(request)}");
             var response = await _storeServices.GetProductCategories(request);
             return Ok(response);

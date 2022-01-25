@@ -1,78 +1,112 @@
 ﻿@model FarmFresh.Backend.Web.Customer.Models.ProductViewModel
 
 @{
-    ViewData["Title"] = "Detail";
+	ViewData["Title"] = "Buy Product";
 }
+<div style="margin-top: 80px">
+	<h4>Buy Product</h4>
+	<hr />
+</div>
+<div class="mt-5">
 
-<h1>Detail</h1>
+	<div class="row">
+		<div class="col-md-7">
+			<dl class="row">
+
+				<dt class="col-sm-2">
+					Name
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.Name)
+				</dd>
+				<dt class="col-sm-2">
+					Description
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.Description)
+				</dd>
+
+				<dt class="col-sm-2">
+					Price
+				</dt>
+				<dd class="col-sm-10">
+					$@Html.DisplayFor(model => model.Price)
+				</dd>
+				<dt class="col-sm-2">
+					Current Amount
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.AvailableAmount)
+				</dd>
+
+				<dt class="col-sm-2">
+					Store
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.StoreName)
+				</dd>
+				<dt class="col-sm-2">
+					Category
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.CategoryName)
+				</dd>
+				<dt class="col-sm-2">
+					Preview
+				</dt>
+				<dd class="col-sm-10">
+					<img src="@Model.ImageUrl" class="img-fluid" style="height:400px; width:400px" />
+				</dd>
+			</dl>
+		</div>
+		<div class="col-md-5">
+			<div class="mt-1 row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label>Total Order</label>
+						<input type="number" id="totalOrder" class="form-control" min="1" required value="1"/>
+
+					</div>
+					<div class="form-group">
+						<button id="orderButton" class="btn btn-primary">Order Now</button>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<input asp-for="Id" type="hidden" />
+<input asp-for="StoreId" type="hidden" />
+<input asp-for="CategoryId" type="hidden" />
 
 <div>
-    <h4>ProductViewModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AvailableAmount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AvailableAmount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StoreId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StoreId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StoreName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StoreName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryName)
-        </dd>
-    </dl>
+	@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+	<a asp-action="Index">Back to List</a>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+@section Scripts{
+<script asp-append-version="true">
+	$("#orderButton").click(function () {
+		$.ajax({
+			url: "/Products/Order",
+			method: "POST",
+			data: {
+				total: parseInt($("#totalOrder").val()),
+				productId: $("#Id").val(),
+				storeId: $("#StoreId").val()
+			},
+			success: function () {
+				location.href = "/OrderHistories"
+			},
+			error: function () {
+				swal.fire({
+					icon: "error",
+					title: 'Oops...',
+					text: 'Something went wrong! Please try again later.',
+				});
+			}
+		})
+		});
+</script>
+}

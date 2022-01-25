@@ -31,7 +31,7 @@ namespace FarmFresh.Backend.Web.Customer.Controllers
 
         public async Task<IActionResult> GetOrderHistories(BaseListInput request)
         {
-            string path = _configuration["ResourceEndpoints:Path:AllOrderHistories"];
+            string path = $"{_configuration["ResourceEndpoints:Path:AllOrderHistories"]}?skipCount={request.SkipCount}&fetchSize={request.FetchSize}";
             var response = await _httpClient.GetAsync(path);
             BaseListOutput<OrderHistoryViewModel> result = new BaseListOutput<OrderHistoryViewModel>();
             if (response.IsSuccessStatusCode)

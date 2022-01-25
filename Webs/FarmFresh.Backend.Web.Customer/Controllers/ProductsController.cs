@@ -30,7 +30,7 @@ namespace FarmFresh.Backend.Web.Customer.Controllers
 
         public async Task<IActionResult> GetProducts(ProductListInput request)
         {
-            string path = _configuration["ResourceEndpoints:Path:AllProducts"];
+            string path = $"{_configuration["ResourceEndpoints:Path:AllProducts"]}?category={request.Category}&query={request.Query}&skipCount={request.SkipCount}&fetchSize={request.FetchSize}";
             var response = await _httpClient.GetAsync(path);
             BaseListOutput<ProductViewModel> result = new BaseListOutput<ProductViewModel>();
             if (response.IsSuccessStatusCode)
@@ -58,7 +58,7 @@ namespace FarmFresh.Backend.Web.Customer.Controllers
         public async Task<IActionResult> Detail(string id)
         {
             ViewBag.Message = string.Empty;
-            string path = $"{_configuration["ResourceEndpoints:Path:ProductById"]}{id}";
+            string path = $"{_configuration["ResourceEndpoints:Path:ProductById"]}{id}/item";
             var response = await _httpClient.GetAsync(path);
             ProductViewModel model = new ProductViewModel();
             if (response.IsSuccessStatusCode)
@@ -89,7 +89,7 @@ namespace FarmFresh.Backend.Web.Customer.Controllers
             if (ModelState.IsValid)
             {
                 string path = _configuration["ResourceEndpoints:Path:MakeAnOrder"];
-                var response = await _httpClient.PutAsJsonAsync(path, model);
+                var response = await _httpClient.PostAsJsonAsync(path, model);
                 if (response.IsSuccessStatusCode)
                 {
                     return Ok(new { isSuccess = true, message = string.Empty });

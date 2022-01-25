@@ -38,6 +38,8 @@ namespace FarmFresh.Backend.Api.Customers.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] ProductListInput request)
         {
+            request.Query = string.IsNullOrEmpty(request.Query) ? string.Empty : request.Query;
+            request.Category = string.IsNullOrEmpty(request.Category) ? string.Empty : request.Category;
             _logger.LogInformation($"[GET] /api/v1/products => {JsonConvert.SerializeObject(request)}");
             var response = await _customerServices.GetProducts(request);
             return Ok(response);

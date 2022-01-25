@@ -30,6 +30,7 @@ namespace FarmFresh.Backend.Api.Customers.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] BaseListInput request)
         {
+            request.Query = string.IsNullOrEmpty(request.Query) ? string.Empty : request.Query;
             string userId = User.FindFirstValue("sub");
             _logger.LogInformation($"[GET] /api/v1/OrderHistories => {JsonConvert.SerializeObject(request)}");
             var response = await _customerServices.GetOrderHistories(Guid.Parse(userId), request);
