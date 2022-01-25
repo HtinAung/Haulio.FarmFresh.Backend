@@ -53,7 +53,7 @@ namespace FarmFresh.IdentityServer
         public static IEnumerable<Client> Clients(IConfiguration configuration) =>
             new Client[]
             {
-                // swagger client
+                //web and swagger client
                 new Client
                 {
                     ClientId = configuration["ClientId"],
@@ -73,31 +73,24 @@ namespace FarmFresh.IdentityServer
                     AllowOfflineAccess = true,
                     RedirectUris =
                     {
+                        $"{configuration["CustomersWebAddress"]}/signin-oidc",
+                        $"{configuration["StoresWebAddress"]}/signin-oidc",
                         $"{configuration["CustomerApiAddress"]}/swagger/oauth2-redirect.html",
-                        $"{configuration["StoreApiAddress"]}/swagger/oauth2-redirect.html",
+                        $"{configuration["StoreApiAddress"]}/swagger/oauth2-redirect.html"
+
+                    },
+                    PostLogoutRedirectUris =
+                    {
+                        $"{configuration["CustomersWebAddress"]}/signout-callback-oidc",
+                        $"{configuration["StoresWebAddress"]}/signout-callback-oidc"
+
                     },
                     AllowedCorsOrigins =
                     {
                         configuration["CustomerApiAddress"],
                         configuration["StoreApiAddress"]
                     }
-                },
-
-                //// interactive client using code flow + pkce
-                //new Client
-                //{
-                //    ClientId = "interactive",
-                //    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-
-                //    AllowedGrantTypes = GrantTypes.Code,
-
-                //    RedirectUris = { "https://localhost:44300/signin-oidc" },
-                //    FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
-                //    PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
-
-                //    AllowOfflineAccess = true,
-                //    AllowedScopes = { "openid", "profile", "scope2" }
-                //},
+                }
             };
     }
 }
