@@ -43,7 +43,7 @@ Here's the bacpac file that can be used to restore DB (if you don't want to run 
 The storage used for uploading product image in Store API uses Azure Blob Storage. This storage is also the place for holding the log data (information and error) for the applications. You can see the blob storage connection string in the appsettings.json (in real life, i don't put sensitive informations in appsettings.json).
 
 ## API Swagger
-### NB: To test the swagger apis, please click the Authorize button, click checklist for the scope and for login, please use account info above. And if you want to logout, please click the logout button on the identity server 4 (you don't need to do this if you use web app)
+### NB: To test the swagger apis, please click the Authorize button, click checklist for the scope and for login, please use account info above. And if you want to logout, please click the authorize button again, click logout and the go to identity server 4 and click logout (you don't need to do this if you use web app - it will be automatically logout from all sessions)
 
 
 ![enter image description here](https://raw.githubusercontent.com/mirzaevolution/Haulio.FarmFresh.Backend/master/Screenshots/2022-01-25_09h50_021.png)
