@@ -48,6 +48,10 @@ The storage used for uploading product image in Store API uses Azure Blob Storag
 
 ![enter image description here](https://github.com/mirzaevolution/Haulio.FarmFresh.Backend/blob/master/Screenshots/2022-01-25_09h50_061.png?raw=true)
 
+## Identity Server
+![enter image description here](https://raw.githubusercontent.com/mirzaevolution/Haulio.FarmFresh.Backend/master/Screenshots/2022-01-25_09h50_151.png)
+
+
 ## Web App
 ![enter image description here](https://raw.githubusercontent.com/mirzaevolution/Haulio.FarmFresh.Backend/master/Screenshots/2022-01-25_09h46_04.png)
 
