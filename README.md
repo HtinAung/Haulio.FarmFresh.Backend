@@ -14,7 +14,14 @@ I also have created default account for testing:
 - Customer Account: (ghulamcyber@hotmail.com, password: @Future30)
 -  Store Account: (raraanjani@gmail.com, password: @Future30)
 
-
+The stack i used:
+- Apis: .NET Core 5 
+- IdentityServer4: .NET Core 5
+- Api Gateway: Ocelot .NET Core 5
+- Web App (Customer): ASP.NET Core 5 with JQuery and Bootstrap
+- Database: SQL Server
+- EF Strategy: Code First
+- Storage: Azure Blob Storage
 
 ## DB Location
 Here's the bacpac file that can be used to restore DB (if you don't want to run migration script).
@@ -26,6 +33,11 @@ Here's the bacpac file that can be used to restore DB (if you don't want to run 
 ## Architecture
 
 ![enter image description here](https://raw.githubusercontent.com/mirzaevolution/Haulio.FarmFresh.Backend/master/Screenshots/2022-01-25_09h54_011.png)
+
+
+## Storage & Logging
+The storage used for uploading product image in Store API uses Azure Blob Storage. This storage is also the place for holding the log data (information and error) for the applications. You can see the blob storage connection string in the appsettings.json (in real life, i don't put sensitive informations in appsettings.json).
+
 ## API Swagger
 
 ![enter image description here](https://raw.githubusercontent.com/mirzaevolution/Haulio.FarmFresh.Backend/master/Screenshots/2022-01-25_09h50_021.png)
@@ -39,3 +51,7 @@ Here's the bacpac file that can be used to restore DB (if you don't want to run 
 ![enter image description here](https://raw.githubusercontent.com/mirzaevolution/Haulio.FarmFresh.Backend/master/Screenshots/2022-01-25_09h46_14.png)
 
 ![enter image description here](https://raw.githubusercontent.com/mirzaevolution/Haulio.FarmFresh.Backend/master/Screenshots/2022-01-25_09h48_33.png)
+
+
+
+## NB: All Apis are working properly but i haven't finished all the functionalities for the Web App either the Customer Web App or Store Web App
