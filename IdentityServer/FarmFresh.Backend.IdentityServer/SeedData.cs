@@ -25,7 +25,7 @@ namespace FarmFresh.IdentityServer
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(connectionString));
 
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -55,7 +55,6 @@ namespace FarmFresh.IdentityServer
                         {
                             throw new Exception(result.Errors.First().Description);
                         }
-
                         result = userMgr.AddClaimsAsync(customerUser, new Claim[]{
                             new Claim(JwtClaimTypes.Name, customerUser.FullName),
                             new Claim(JwtClaimTypes.Email, customerUser.Email),

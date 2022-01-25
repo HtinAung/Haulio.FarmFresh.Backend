@@ -20,6 +20,8 @@
 
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.13" />
 
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.1-dev-00250" />
 
@@ -37,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.DataTransferObjects\FarmFresh.Backend.DataTransferObjects.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Entities\FarmFresh.Backend.Entities.csproj" />
+    <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Mappers\FarmFresh.Backend.Mappers.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Repositories\FarmFresh.Backend.Repositories.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Services\FarmFresh.Backend.Services.csproj" />
     <ProjectReference Include="..\..\SharedLibraries\FarmFresh.Backend.Shared\FarmFresh.Backend.Shared.csproj" />

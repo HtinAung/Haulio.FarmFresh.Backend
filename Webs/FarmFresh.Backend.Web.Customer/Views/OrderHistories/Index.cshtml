@@ -1,0 +1,106 @@
+﻿
+@{
+	ViewData["Title"] = "Order Histories";
+}
+
+<div style="margin-top:90px">
+	<h3><span class="fa fa-history"></span> Order Histories</h3>
+
+</div>
+<div class="row mt-3">
+	<div class="col-md-12">
+		
+		<table id="tableOrders" class="table table-striped table-bordered table-hover">
+			<thead class="bg-dark">
+				<tr>
+					<th class="text-light">Item</th>
+					<th class="text-light">Total</th>
+					<th class="text-light">Price</th>
+					<th class="text-light">Store</th>
+					<th class="text-light">Date</th>
+				</tr>
+			</thead>
+			<tbody id="tableOrdersBody">
+			</tbody>
+		</table>
+		<div id="loadMoreBlock" class="mt-3 text-center">
+			<button type="button" id="loadMoreButton" class="btn btn-link">Load More..</button>
+		</div>
+	</div>
+</div>
+
+<input id="currentFetchSize" type="hidden" value="7" />
+<input id="currentSkipSize" type="hidden" value="0" />
+
+
+
+@section Scripts{
+	<script asp-append-version="true">
+		$(document).ready(function () {
+			loadOrderHistories();
+			$("#loadMoreButton").click(function () {
+				var currentFetchSize = parseInt($("#currentFetchSize").val());
+				var currentSkipSize = parseInt($("#currentSkipSize").val());
+				$("#currentSkipSize").val(parseInt(currentFetchSize + currentSkipSize));
+				loadOrderHistories();
+
+			});
+
+		});
+		function loadOrderHistories() {
+			var fetchUrl = "/OrderHistories/GetOrderHistories";
+			var currentFetchSize = $("#currentFetchSize").val();
+			var currentSkipSize = $("#currentSkipSize").val();
+			$.ajax({
+				method: "GET",
+				url: fetchUrl,
+				data: {
+					skipCount: currentSkipSize,
+					fetchSize: currentFetchSize
+				},
+				success: function (response) {
+					if (response) {
+
+						$("#currentFetchSize").val(response.fetchSize);
+						$("#currentSkipSize").val(response.skipCount);
+						if (response.rows) {
+
+							var len = response.rows.length;
+							var row = "";
+							for (var i = 0; i < len; i++) {
+								row += "<tr>";
+								row += "<td>" + response.rows[i].item + "</td>";
+								row += "<td>" + response.rows[i].total + "</td>";
+								row += "<td>$" + response.rows[i].price + "</td>";
+								row += "<td>" + response.rows[i].storeName + "</td>";
+								row += "<td>" + new Date(response.rows[i].modifiedDate).toDateString() + "</td>";
+								row += "</tr>";
+							}
+							$("#tableOrdersBody").append(row);
+							if (len === response.fetchSize) {
+								$("#loadMoreBlock").show();
+							} else {
+								$("#loadMoreBlock").hide();
+							}
+						} else {
+							$("#loadMoreBlock").hide();
+						}
+					} else {
+						swal.fire({
+							icon: "error",
+							title: 'Oops...',
+							text: 'Something went wrong! Please try again later.',
+						});
+					}
+				},
+				error: function () {
+					swal.fire({
+						icon: "error",
+						title: 'Oops...',
+						text: 'Something went wrong! Please try again later.',
+					});
+				}
+			})
+		}
+	</script>
+}

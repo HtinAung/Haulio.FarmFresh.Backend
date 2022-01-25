@@ -1,0 +1,9 @@
+Backend Pagination Description (parameters)
+- query	(Req/Res)		= search keyword (optional - default: ''/empty/all rows)
+- category (Req/Res)	= product category (optional - default: ''/empty/all categories)
+- skipCount (Req/Res)	= totalRows to skip (optional - default: 0)
+- fetchSize (Req/Res)	= total rows to load based on query for current page (optional - default: 100)
+- totalRows	(Res)		= total rows for all pages based on query (sent by the backend)
+- rows	(Res)			= data based on the query and pagination (sent by the backend)
+
+NB: Req = request. Res = response.

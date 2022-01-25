@@ -17,6 +17,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FarmFresh.Backend.Entities;
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -46,6 +48,124 @@ namespace IdentityServerHost.Quickstart.UI
             _schemeProvider = schemeProvider;
             _events = events;
         }
+
+
+        [HttpGet]
+        public IActionResult RegisterCustomer(string returnUrl)
+        {
+            return View(new RegisterCustomerViewModel
+            {
+                ReturnUrl = returnUrl
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterCustomer(RegisterCustomerViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser applicationUser = new AppUser
+                {
+                    Id = Guid.NewGuid(),
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    UserName = model.Email,
+                    EmailConfirmed = true,
+                    Addresses = new List<AppUserAddress>
+                    {
+                        new AppUserAddress
+                        {
+                            AddressLine = model.AddressLine,
+                            City = model.City,
+                            Region = model.Region,
+                            Country = model.Country,
+                            PostalCode = model.PostalCode
+                        }
+                    }
+                };
+                var identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
+                if (identityResult.Succeeded)
+                {
+                    identityResult = await _userManager.AddClaimsAsync(applicationUser, new Claim[]
+                    {
+                        new Claim(JwtClaimTypes.Name, applicationUser.FullName),
+                        new Claim(JwtClaimTypes.Email, applicationUser.Email),
+                        new Claim(JwtClaimTypes.Role, GlobalConstants.CustomerUserRoleName)
+
+                    });
+                    return RedirectToAction(nameof(Login), new { returnUrl = model.ReturnUrl });
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Failed to create account. Please try again later!");
+                    return View(model);
+                }
+            }
+            return View(model);
+        }
+
+
+        [HttpGet]
+        public IActionResult RegisterStore(string returnUrl)
+        {
+            return View(new RegisterCustomerViewModel
+            {
+                ReturnUrl = returnUrl
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterStore(RegisterStoreViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser applicationUser = new AppUser
+                {
+                    Id = Guid.NewGuid(),
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    UserName = model.Email,
+                    EmailConfirmed = true,
+                    Addresses = new List<AppUserAddress>
+                    {
+                        new AppUserAddress
+                        {
+                            AddressLine = model.AddressLine,
+                            City = model.City,
+                            Region = model.Region,
+                            Country = model.Country,
+                            PostalCode = model.PostalCode
+                        }
+                    }
+                };
+                var identityResult = await _userManager.CreateAsync(applicationUser, model.Password);
+                if (identityResult.Succeeded)
+                {
+                    identityResult = await _userManager.AddClaimsAsync(applicationUser, new Claim[]
+                    {
+                        new Claim(JwtClaimTypes.Name, applicationUser.FullName),
+                        new Claim(JwtClaimTypes.Email, applicationUser.Email),
+                        new Claim(JwtClaimTypes.Role, GlobalConstants.StoreAdminRoleName)
+
+                    });
+                    return RedirectToAction(nameof(Login), new { returnUrl = model.ReturnUrl });
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Failed to create account. Please try again later!");
+                    return View(model);
+                }
+            }
+            return View(model);
+        }
+
+
+
+
 
         /// <summary>
         /// Entry point into the login workflow
@@ -104,11 +224,11 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberLogin, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByNameAsync(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName, clientId: context?.Client.ClientId));
+                    var user = await _userManager.FindByNameAsync(model.Email);
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Email, user.Id.ToString(), user.FullName, clientId: context?.Client.ClientId));
 
                     if (context != null)
                     {
@@ -139,7 +259,7 @@ namespace IdentityServerHost.Quickstart.UI
                     }
                 }
 
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.Client.ClientId));
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Email, "invalid credentials", clientId:context?.Client.ClientId));
                 ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
 
@@ -224,7 +344,7 @@ namespace IdentityServerHost.Quickstart.UI
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
+                    Email = context?.LoginHint,
                 };
 
                 if (!local)
@@ -265,7 +385,7 @@ namespace IdentityServerHost.Quickstart.UI
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
+                Email = context?.LoginHint,
                 ExternalProviders = providers.ToArray()
             };
         }
@@ -273,7 +393,7 @@ namespace IdentityServerHost.Quickstart.UI
         private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
         {
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
-            vm.Username = model.Username;
+            vm.Email = model.Email;
             vm.RememberLogin = model.RememberLogin;
             return vm;
         }

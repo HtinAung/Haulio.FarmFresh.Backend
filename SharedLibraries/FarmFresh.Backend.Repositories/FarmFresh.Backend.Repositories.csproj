@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FarmFresh.Backend.Entities\FarmFresh.Backend.Entities.csproj" />
+    <ProjectReference Include="..\FarmFresh.Backend.Shared\FarmFresh.Backend.Shared.csproj" />
     <ProjectReference Include="..\FarmFresh.Backend.Storages\FarmFresh.Backend.Storages.csproj" />
   </ItemGroup>
 

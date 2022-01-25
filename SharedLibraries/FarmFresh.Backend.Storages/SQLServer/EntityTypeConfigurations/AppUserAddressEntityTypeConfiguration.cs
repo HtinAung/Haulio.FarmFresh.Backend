@@ -8,6 +8,7 @@ namespace FarmFresh.Backend.Storages.SQLServer.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<AppUserAddress> builder)
         {
+            builder.ToTable("UserAddresses");
 
             builder
                 .Property(c => c.AddressLine)

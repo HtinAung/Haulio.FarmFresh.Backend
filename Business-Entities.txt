@@ -1,0 +1,49 @@
+﻿> ProductCategory
+	 - Id (guid)
+	 - Name (string)
+	 - Products (list of Product)
+
+> Product
+	 - Id (guid)
+	 - Name (string)
+	 - Description (string)
+	 - ImagePreviewUrl (string)
+	 - Price (decimal)
+	 - AvailableAmount (int)
+	 - CategoryId (guid)
+	 - StoredId (guid)
+
+ > OrderHistory
+	 - Id (guid)
+	 - Item (string)
+	 - Total (int)
+	 - Price (decimal)
+	 - OrderDate/ModifiedDate (datetime)
+	 - UserId (guid)
+	 - StoreId (guid)
+
+ > User (not all props from ASP.NET Core Identity shown here)
+	 - UserId (guid)
+	 - FullName (string)
+	 - Email (string)
+	 - Password (string)
+	 - StoreId (guid)
+	 - Addresses (1) (list of UserAddress)
+	 - OrderHistories (list of User Order History)
+
+> UserAddress
+	 - Id (guid)
+	 - UserId (guid)
+	 - AddressLine (string)
+	 - City (string)
+	 - Region (string)
+	 - Country (string)
+	 - PostalCode (string)
+
+> Store
+	 - Id (guid)
+	 - UserAdminId (guid) ----> refers to User object
+	 - Name (string)
+	 - Products (list of Product)
+	 - OrderHistories (list of User Order History by store)
+

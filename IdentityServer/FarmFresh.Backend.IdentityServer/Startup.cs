@@ -12,6 +12,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FarmFresh.Backend.Storages.SQLServer;
 using FarmFresh.Backend.Entities;
+using FarmFresh.Backend.Repositories.Implementations;
+using FarmFresh.Backend.Repositories.Interfaces;
+using FarmFresh.Backend.Services.Implementations.Stores;
+using FarmFresh.Backend.Services.Interfaces;
+using FarmFresh.Backend.Shared;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using AutoMapper;
+using FarmFresh.Backend.Mappers.Dtos2Entities;
 
 namespace FarmFresh.IdentityServer
 {
@@ -29,14 +38,34 @@ namespace FarmFresh.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new Dto2EntitiesMapperConfiguration());
+            });
 
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserAddressRepository, UserAddressRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IStoreServices, StoreServices>();
+            services.AddSingleton<BlobStorageHelper>((sp) =>
+            {
+                string blobConnectionString = Configuration.GetConnectionString("StorageAccount");
+                string blobContainer = Configuration["Mode"];
+                var blobContainerClient = new BlobContainerClient(blobConnectionString, blobContainer);
+                blobContainerClient.CreateIfNotExistsAsync(publicAccessType: PublicAccessType.Blob).Wait();
+                return new BlobStorageHelper(blobContainerClient);
+            });
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -49,23 +78,14 @@ namespace FarmFresh.IdentityServer
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
+                .AddInMemoryApiResources(Config.ApiResources)
+                .AddInMemoryClients(Config.Clients(Configuration))
                 .AddAspNetIdentity<AppUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
-            services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5001/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
+            services.AddAuthentication();
         }
 
         public void Configure(IApplicationBuilder app)
